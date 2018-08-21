@@ -29,5 +29,8 @@ namespace Stipendium.Models
         {
             return new ApplicationDbContext();
         }
+
+        object placeHolderVariable;
+        public System.Data.Entity.DbSet<Stipendium.Models.Stipend> Stipends { get; set; }
     }
 }
