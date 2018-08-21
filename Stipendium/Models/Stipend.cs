@@ -7,7 +7,8 @@ namespace Stipendium.Models
 {
     public class Stipend
     {
-        public string ID { get; set; }
+
+        public Guid ID { get; set; }
 
         public string Title { get; set; }
         public string AddressLine1 { get; set; }

@@ -50,7 +50,6 @@ namespace Stipendium.Controllers
         {
             if (ModelState.IsValid)
             {
-                stipend.ID = Guid.NewGuid().ToString();
                 db.Stipends.Add(stipend);
                 db.SaveChanges();
                 return RedirectToAction("Index");
