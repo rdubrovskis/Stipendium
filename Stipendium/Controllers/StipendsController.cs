@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Stipendium.Models;
+using PagedList;
 
 namespace Stipendium.Controllers
 {
@@ -15,9 +16,13 @@ namespace Stipendium.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Stipends
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.Stipends.ToList());
+            var list = db.Stipends.ToList();
+            int pageSize = 5;
+            int pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+
+            return View(list.ToPagedList(pageIndex,pageSize));
         }
 
         // GET: Stipends/Details/5
@@ -50,6 +55,7 @@ namespace Stipendium.Controllers
         {
             if (ModelState.IsValid)
             {
+                stipend.ID = Guid.NewGuid().ToString();
                 db.Stipends.Add(stipend);
                 db.SaveChanges();
                 return RedirectToAction("Index");

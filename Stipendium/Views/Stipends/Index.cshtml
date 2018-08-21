@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Stipendium.Models.Stipend>
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<Stipendium.Models.Stipend>
 
 @{
     ViewBag.Title = "Index";
@@ -9,79 +10,51 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+<p>Total records: @Html.DisplayFor(model=> model.Count)</p>
+
+<div class="pagination">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+    of @Model.PageCount   @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            Siftelsenamn
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AddressLine1)
+            Ändamål
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AddressLine2)
+            Förmögenhet (SEK)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PostNr)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.County)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ContactInfo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrgNr)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Capital)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AcceptsApplications)
+
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AddressLine1)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AddressLine2)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PostNr)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.County)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ContactInfo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrgNr)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Capital)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AcceptsApplications)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Capital)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AcceptsApplications)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
 
 </table>
