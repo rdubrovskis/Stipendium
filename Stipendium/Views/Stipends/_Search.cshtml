@@ -1,0 +1,82 @@
+﻿@model Stipendium.Models.SearchQuery
+@using Stipendium.Models
+@using (Html.BeginForm("_Search", "Stipends"))
+{
+    @Html.AntiForgeryToken()
+
+    var counties = new Counties();
+
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+
+    <div style="display:  flex; justify-content: space-evenly;">
+        <div>
+            Län: <input type="checkbox" id="all-counties" checked /> All / <a data-toggle="collapse" href="#collapseCounties" aria-expanded="false" aria-controls="collapseExample">
+                Ändra
+            </a>
+        </div>
+        <div class="form-group">
+            Söktext @Html.EditorFor(model => model.SearchTerm)
+        </div>
+        <div>
+            Kommun @Html.HiddenFor(model => model.SearchCounty)
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Sök" class="btn btn-default" />
+        </div>
+    </div>
+
+    <div class="collapse" id="collapseCounties" style="padding:20px">
+        <div class="card card-body">
+            <ul style="list-style: none">
+                @foreach (var item in counties.List)
+                {
+                    <li style="display:inline">@item <input type="checkbox" /></li>
+                }
+            </ul>
+            
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function (){
+
+        checkboxCheck();
+    });
+
+    function checkboxCheck() {
+
+        var checked = $("#all-counties").is(":checked");
+
+        if (checked) { $(".county-check").prop("checked", true); }
+        else {
+            $(".county-check").prop("checked", false);
+        }
+    }
+
+    $("#all-counties").change(function () {
+        checkboxCheck();
+    });
+
+    $(".county-check").change(function () {
+        var county_value = $("#SearchCounty").val();
+        if ($(this).is(":checked")) {
+            if (county_value !== "") {
+                county_value = county_value + '&' + $(this).val();
+            }
+            else {
+                county_value = $(this).val();
+            }
+        }
+        else {
+            county_value = $("#SearchCounty").val().replace($(this).val()+'&', '');
+        }
+
+        county_value = county_value.replace('&&', '&');
+
+        $("#SearchCounty").val(county_value);
+    });
+
+
+</script>

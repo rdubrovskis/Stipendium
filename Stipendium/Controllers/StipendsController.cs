@@ -129,5 +129,26 @@ namespace Stipendium.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult _Search()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult _Search([Bind(Include = "SearchTerm")] SearchQuery query)
+        {
+            var list = new List<Stipend>();
+
+            list = string.IsNullOrWhiteSpace(query.SearchTerm) ? db.Stipends.ToList() : db.Stipends.Where(s => s.Title.Contains(query.SearchTerm)).ToList();
+
+
+            return PagedList(list);
+        }
+
+        public ActionResult PagedList(List<Stipend> stipends)
+        {
+            return View("Index", stipends.ToPagedList(1, 5));
+        }
     }
 }
