@@ -1,9 +1,19 @@
 ﻿@using PagedList.Mvc
+@using Stipendium.Models;
 @model PagedList.IPagedList<Stipendium.Models.Stipend>
 
 @{
     ViewBag.Title = "Index";
+    ApplicationDbContext db = new ApplicationDbContext();
 }
+<style>
+    .pagination {
+        margin-top:0px;
+    }
+    th {
+        min-width: 90px;
+    }
+</style>
 
 <h2>Index</h2>
 
@@ -11,11 +21,10 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-<p>Total records: @Html.DisplayFor(model=> model.Count)</p>
+@{ Html.RenderPartial("_Search", new SearchQuery());}
 
 <div class="pagination">
-    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
-    of @Model.PageCount   @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>
 <table class="table">
     <tr>
@@ -47,7 +56,7 @@
                 @Html.DisplayFor(modelItem => item.Capital)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AcceptsApplications)
+
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
@@ -58,3 +67,5 @@
     }
 
 </table>
+
+<script></script>
