@@ -1,13 +1,12 @@
-﻿using System;
+﻿using PagedList;
+using Stipendium.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using Stipendium.Models;
-using PagedList;
 
 namespace Stipendium.Controllers
 {
@@ -18,11 +17,13 @@ namespace Stipendium.Controllers
         // GET: Stipends
         public ActionResult Index(int? page)
         {
+
             var list = db.Stipends.ToList();
             int pageSize = 5;
             int pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
 
-            return View(list.ToPagedList(pageIndex,pageSize));
+
+            return View(list.ToPagedList(pageIndex, pageSize));
         }
 
         // GET: Stipends/Details/5
@@ -136,19 +137,28 @@ namespace Stipendium.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult _Search([Bind(Include = "SearchTerm")] SearchQuery query)
+        public ActionResult _Search([Bind(Include = "SearchTerm,SelectedCounties,ItemsPerPage")] SearchQuery sQuery)
         {
-            var list = new List<Stipend>();
 
-            list = string.IsNullOrWhiteSpace(query.SearchTerm) ? db.Stipends.ToList() : db.Stipends.Where(s => s.Title.Contains(query.SearchTerm)).ToList();
+            var stipList = new List<Stipend>();
+            //stipList = string.IsNullOrWhiteSpace(sQuery.SearchTerm) ? db.Stipends.ToList() : db.Stipends.Where(s => s.Title.Contains(sQuery.SearchTerm)).ToList();
 
+            if (sQuery.SelectedCounties != null)
+            {
+                foreach (var county in sQuery.SelectedCounties)
+                {
+                    var stipendsInCounty = db.Stipends.Where(s => s.County == county).ToList();
+                    stipList.AddRange(stipendsInCounty);
+                }
+            }
 
-            return PagedList(list);
+           
+            stipList = sQuery.SearchTerm != null ? stipList.Where(s => s.Title.Contains(sQuery.SearchTerm)).ToList() : stipList;
+
+            ViewData["Query"] = sQuery;
+
+            return View("Index", stipList.ToPagedList(1, sQuery.ItemsPerPage));
         }
 
-        public ActionResult PagedList(List<Stipend> stipends)
-        {
-            return View("Index", stipends.ToPagedList(1, 5));
-        }
     }
 }

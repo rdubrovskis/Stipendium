@@ -38,7 +38,7 @@ namespace Stipendium.Migrations
                     ContactInfo = "0712345" + i.ToString(),
                     PostNr = 10001 + i,
                     AcceptsApplications = true,
-                    County = "Stockholm Län"
+                    County = "Stockholms Län"
                 };
 
                 db.Stipends.AddOrUpdate(seedStipend);

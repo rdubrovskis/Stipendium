@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = "Index";
     ApplicationDbContext db = new ApplicationDbContext();
+    var query = ViewData["Query"] ?? new SearchQuery();
 }
 <style>
     .pagination {
@@ -21,7 +22,7 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-@{ Html.RenderPartial("_Search", new SearchQuery());}
+@{ Html.RenderPartial("_Search", query);}
 
 <div class="pagination">
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

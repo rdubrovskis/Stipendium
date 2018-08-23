@@ -8,6 +8,8 @@ namespace Stipendium.Models
     public class SearchQuery
     {
         public string SearchTerm { get; set; }
-        public string SearchCounty { get; set; }
+        public string[] SelectedCounties { get; set; }
+        public string SearchCommune { get; set; }
+        public int ItemsPerPage { get; set; }
     }
 }
