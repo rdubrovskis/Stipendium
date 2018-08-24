@@ -13,17 +13,20 @@ namespace Stipendium.Controllers
     public class StipendsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private Counties counties = new Counties();
 
         // GET: Stipends
         public ActionResult Index(int? page)
         {
+            var query = new SearchQuery
+            {
+                SelectedCounties = counties.List.ToArray(),
+                SearchResults = db.Stipends.ToList().OrderByDescending(s=>s.Capital).ToPagedList(1, 5),
+                Page = 1
+                
+            };
 
-            var list = db.Stipends.ToList();
-            int pageSize = 5;
-            int pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-
-
-            return View(list.ToPagedList(pageIndex, pageSize));
+            return View("SearchResults",query);
         }
 
         // GET: Stipends/Details/5
@@ -131,34 +134,57 @@ namespace Stipendium.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult _Search()
+
+        public List<Stipend> ListBuilder (string[] counties, string sTerm, string sMunicip)
+        {
+            List<Stipend> ResultsList = new List<Stipend>();
+            if (counties != null)
+            {
+                foreach (var county in counties)
+                {
+                    var stipendsInCounty = db.Stipends.Where(s => s.County == county).ToList();
+                    ResultsList.AddRange(stipendsInCounty);
+                }
+            }
+            else
+            {
+                ResultsList = db.Stipends.ToList();
+            }
+            ResultsList = sMunicip != null ? ResultsList.Where(r => r.Municipality.Contains(sMunicip)).ToList() : ResultsList;
+            ResultsList = sTerm != null ? ResultsList.Where(r => r.Title.Contains(sTerm)).ToList() : ResultsList;
+            ResultsList = ResultsList.OrderByDescending(s => s.Capital).ToList();
+
+            return (ResultsList);
+        }
+
+        public ActionResult NewPage(int page, int size, string counties, string sTerm, string sMunicip)
+        {
+            string[] selectedCounties = counties.Split('&');
+            var query = new SearchQuery
+            {
+                SelectedCounties = selectedCounties,
+                ItemsPerPage = size,
+                SearchMunicipality = sMunicip,
+                SearchTerm = sTerm,
+                SearchResults = ListBuilder(selectedCounties,sTerm,sMunicip).ToPagedList(page,size)
+            };
+
+            return View("SearchResults",query);
+        }
+
+        public ActionResult SearchResults()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult _Search([Bind(Include = "SearchTerm,SelectedCounties,ItemsPerPage")] SearchQuery sQuery)
+        public ActionResult SearchResults([Bind(Include = "SearchTerm,SearchMunicipality,SelectedCounties,ItemsPerPage,Page")] SearchQuery sQuery)
         {
 
-            var stipList = new List<Stipend>();
-            //stipList = string.IsNullOrWhiteSpace(sQuery.SearchTerm) ? db.Stipends.ToList() : db.Stipends.Where(s => s.Title.Contains(sQuery.SearchTerm)).ToList();
+            sQuery.SearchResults = ListBuilder(sQuery.SelectedCounties,sQuery.SearchTerm,sQuery.SearchMunicipality).ToPagedList(sQuery.Page, sQuery.ItemsPerPage);
 
-            if (sQuery.SelectedCounties != null)
-            {
-                foreach (var county in sQuery.SelectedCounties)
-                {
-                    var stipendsInCounty = db.Stipends.Where(s => s.County == county).ToList();
-                    stipList.AddRange(stipendsInCounty);
-                }
-            }
-
-           
-            stipList = sQuery.SearchTerm != null ? stipList.Where(s => s.Title.Contains(sQuery.SearchTerm)).ToList() : stipList;
-
-            ViewData["Query"] = sQuery;
-
-            return View("Index", stipList.ToPagedList(1, sQuery.ItemsPerPage));
+            return View(sQuery);
         }
-
     }
 }

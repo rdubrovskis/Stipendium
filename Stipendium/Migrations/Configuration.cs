@@ -33,7 +33,7 @@ namespace Stipendium.Migrations
                     "tempus vestibulum. Aenean nec sapien ornare, tempor sapien non, pulvinar velit.",
                     OrgNr = "1234567-" + i.ToString(),
                     AddressLine1 = "Address Line 1 for Test-" + i.ToString(),
-                    Capital = i * 1m,
+                    Capital = i * 1000000,
                     ID = "guid-would-usually-go-here-" + i.ToString(),
                     ContactInfo = "0712345" + i.ToString(),
                     PostNr = 10001 + i,

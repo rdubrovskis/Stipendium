@@ -1,31 +1,43 @@
 ﻿@using PagedList.Mvc
 @using Stipendium.Models;
-@model PagedList.IPagedList<Stipendium.Models.Stipend>
+@model Stipendium.Models.SearchQuery
 
 @{
     ViewBag.Title = "Index";
-    ApplicationDbContext db = new ApplicationDbContext();
     var query = ViewData["Query"] ?? new SearchQuery();
+    string items = "";
+
+    foreach (var item in Model.ToList())
+    {
+        items = items + item.ID + "&";
+
+    }
 }
 <style>
     .pagination {
-        margin-top:0px;
+        margin:5px;
     }
     th {
-        min-width: 90px;
+        min-width: 150px;
     }
 </style>
 
-<h2>Index</h2>
+<h2>Stipendium</h2>
 
-<p>
+<br />
+
+@*<p>
     @Html.ActionLink("Create New", "Create")
-</p>
+</p>*@
 
 @{ Html.RenderPartial("_Search", query);}
 
+<br />
+
+<p>Total records: @Model.TotalItemCount</p>
+
 <div class="pagination">
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+@Html.PagedListPager(Model, page => Url.Action("NewPage", new { page = page, size = Model.PageSize, items = ViewData["IDs"] }))
 </div>
 <table class="table">
     <tr>
@@ -41,29 +53,29 @@
         <th>
 
         </th>
-        <th></th>
+        @*<th></th>*@
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.ActionLink(item.Title, "Details", new { id = item.ID })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Capital)
+                @Html.DisplayFor(modelItem => item.Capital) kr
             </td>
             <td>
 
             </td>
-            <td>
+            @*<td >
                 @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
+            </td>*@
         </tr>
     }
 

@@ -18,6 +18,8 @@ namespace Stipendium.Models
         public string AddressLine2 { get; set; }
         public int PostNr { get; set; }
         public string County { get; set; }
+        public string Municipality { get; set; }
+        public string WebSite { get; set; }
 
         [Required(ErrorMessage = "Please enter your ContactInfo")]
         public string ContactInfo { get; set; }

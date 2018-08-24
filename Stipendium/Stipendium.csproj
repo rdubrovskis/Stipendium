@@ -211,6 +211,14 @@
     <Compile Include="Migrations\201808211242263_init.Designer.cs">
       <DependentUpon>201808211242263_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808231010477_Added_Municipality_2_Stipend.cs" />
+    <Compile Include="Migrations\201808231010477_Added_Municipality_2_Stipend.Designer.cs">
+      <DependentUpon>201808231010477_Added_Municipality_2_Stipend.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808231152558_Added_WebSite_2_Stipend.cs" />
+    <Compile Include="Migrations\201808231152558_Added_WebSite_2_Stipend.Designer.cs">
+      <DependentUpon>201808231152558_Added_WebSite_2_Stipend.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Counties.cs" />
@@ -288,7 +296,7 @@
     <Content Include="Views\Stipends\Details.cshtml" />
     <Content Include="Views\Stipends\Edit.cshtml" />
     <Content Include="Views\Stipends\Index.cshtml" />
-    <Content Include="Views\Stipends\_Search.cshtml" />
+    <Content Include="Views\Stipends\SearchResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -309,6 +317,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201808211242263_init.resx">
       <DependentUpon>201808211242263_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808231010477_Added_Municipality_2_Stipend.resx">
+      <DependentUpon>201808231010477_Added_Municipality_2_Stipend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808231152558_Added_WebSite_2_Stipend.resx">
+      <DependentUpon>201808231152558_Added_WebSite_2_Stipend.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
