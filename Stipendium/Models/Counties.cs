@@ -10,7 +10,6 @@ namespace Stipendium.Models
     {
         public List<String> List = new List<String>
         {
-            "Stockholm Län",
             "Blekinge län",
             "Dalarnas län",
             "Gotlands län",
