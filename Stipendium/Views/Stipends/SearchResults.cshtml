@@ -3,7 +3,7 @@
 @using Stipendium.Models;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Stipendium";
 
     var counties = new Counties();
     int index = 0;
@@ -12,23 +12,28 @@
     string allCheck = checkForCheckmarks ? "checked" : "";
 
     string selectedCounties = "";
-    foreach (var county in Model.SelectedCounties)
+    if (Model.SelectedCounties != null)
     {
-        selectedCounties = selectedCounties == "" ? county : selectedCounties +"&"+ county;
+        foreach (var county in Model.SelectedCounties)
+        {
+            selectedCounties = selectedCounties == "" ? county : selectedCounties + "&" + county;
+        }
     }
 }
 <style>
     .pagination {
-        margin: 5px;
+        margin: 5px 0px;
     }
 
     th {
         min-width: 150px;
+        color: #337ab7;
     }
 
     .form-control {
         width: unset;
         display: unset;
+        background-color: ghostwhite;
     }
 
     .text-box {
@@ -52,17 +57,15 @@
 
 <br />
 
-@using (Html.BeginForm("SearchResults", "Stipends",FormMethod.Post,new {id ="StipendSearch" }))
+@using (Html.BeginForm("SearchResults", "Stipends", FormMethod.Post, new { id = "StipendSearch" }))
 {
     @Html.AntiForgeryToken()
 
-    @Html.HiddenFor(model=>model.Page)
+    @Html.HiddenFor(model => model.Page)
 
     <div style="display:flex; justify-content: space-between;">
         <div class="form-group">
-            Län: <input type="checkbox" id="all-counties" @allCheck /> All / <a data-toggle="collapse" href="#collapseCounties" aria-expanded="false" aria-controls="collapseExample">
-                Ändra
-            </a>
+            Län: <input type="checkbox" id="all-counties" @allCheck /> All / <a id="countiesToggle" data-toggle="collapse" href="#collapseCounties" aria-expanded="false" aria-controls="collapseExample">Ändra <span id="glyph" class="glyphicon glyphicon-triangle-bottom"></span></a>
         </div>
         <div class="form-group">
             Söktext:  @Html.EditorFor(model => model.SearchTerm, new { htmlAttributes = new { placeholder = "Söktext", @class = "form-control" } })
@@ -72,13 +75,13 @@
         </div>
         <div>
             Träffar/sida: @Html.DropDownListFor(model => model.ItemsPerPage, new SelectList(new List<int> {
-5,
-10,
-15
+  5,
+  10,
+  15
 }), new { @class = "form-control" })
         </div>
         <div class="form-group">
-            <input type="submit" value="Sök" class="btn btn-default" style="width:75px" />
+            <input type="submit" value="Sök" class="btn btn-default" style="width:75px; background-color: #337ab7; color: white; border: none;" />
         </div>
     </div>
 
@@ -88,10 +91,13 @@
                 @foreach (var item in counties.List)
                 {
                     string check = "";
+                    string underline = "";
                     if (Model.SelectedCounties != null && Model.SelectedCounties.Contains(item))
                     { check = "checked"; }
+                    if (item.Contains("Stock") || item.Contains("Skå") || item.Contains("Värm") || item.Contains("Västerb"))
+                    { underline = "text-decoration: underline;"; }
 
-                    <li style="display:inline-block; width:20%; text-align:right;">@item <input type="checkbox" name="SelectedCounties[]" class="county-check" id="county-@index" value="@item" @check /></li>
+                    <li style="display:inline-block; width:20%; text-align:right; @underline">@item <input type="checkbox" name="SelectedCounties[]" class="county-check" id="county-@index" value="@item" @check /></li>
                     index++;
                 }
             </ul>
@@ -128,13 +134,13 @@
     {
         <tr>
             <td>
-                @Html.ActionLink(item.Title, "Details", new { id = item.ID })
+                @Html.ActionLink(item.Title, "Details", new { id = item.ID}, new { style = "color: #333; text-decoration: underline;" })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Capital) kr
+                @item.Capital.ToString("#,#") kr
             </td>
             <td></td>
             @*<td >
@@ -177,21 +183,16 @@
 
     $(function () {
         $('.pagination li a').click(function () {
-            // get the url of the page link
-            var url = this.href;
 
+            var url = this.href;
             var page = getParameterByName("page", url);
 
-        // update a hidden field inside the search form with this value
-        $('#Page').val(page);
+            $('#Page').val(page);
+            $('#StipendSearch').submit();
 
-        // trigger the search
-        $('#StipendSearch').submit();
-
-        // stop the link from navigating to the url it is pointing to
-        return false;
+            return false;
+        });
     });
-});
 
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;
@@ -202,6 +203,12 @@
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
+
+    $("#countiesToggle").click(
+        function () {
+            $("#glyph").toggleClass("glyphicon-triangle-bottom glyphicon-triangle-left");
+        }
+    );
 
 </script>
 
