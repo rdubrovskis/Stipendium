@@ -146,10 +146,7 @@ namespace Stipendium.Controllers
                     ResultsList.AddRange(stipendsInCounty);
                 }
             }
-            else
-            {
-                ResultsList = db.Stipends.ToList();
-            }
+
             ResultsList = sMunicip != null ? ResultsList.Where(r => r.Municipality.Contains(sMunicip)).ToList() : ResultsList;
             ResultsList = sTerm != null ? ResultsList.Where(r => r.Title.Contains(sTerm)).ToList() : ResultsList;
             ResultsList = ResultsList.OrderByDescending(s => s.Capital).ToList();
@@ -181,6 +178,7 @@ namespace Stipendium.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SearchResults([Bind(Include = "SearchTerm,SearchMunicipality,SelectedCounties,ItemsPerPage,Page")] SearchQuery sQuery)
         {
+            sQuery.Page = sQuery.ItemsPerPage > 5 && sQuery.Page > 1 ? 1 : sQuery.Page;
 
             sQuery.SearchResults = ListBuilder(sQuery.SelectedCounties,sQuery.SearchTerm,sQuery.SearchMunicipality).ToPagedList(sQuery.Page, sQuery.ItemsPerPage);
 
