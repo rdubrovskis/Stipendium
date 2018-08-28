@@ -21,7 +21,7 @@ namespace Stipendium.Controllers
             var query = new SearchQuery
             {
                 SelectedCounties = counties.List.ToArray(),
-                SearchResults = db.Stipends.ToList().OrderByDescending(s=>s.Capital).ToPagedList(1, 5),
+                //SearchResults = db.Stipends.ToList().OrderByDescending(s=>s.Capital).ToPagedList(1, 5),
                 Page = 1,
                 ItemsPerPage = 5
             };
@@ -162,8 +162,8 @@ namespace Stipendium.Controllers
                 SelectedCounties = selectedCounties,
                 ItemsPerPage = size,
                 SearchMunicipality = sMunicip,
-                SearchTerm = sTerm,
-                SearchResults = ListBuilder(selectedCounties,sTerm,sMunicip).ToPagedList(page,size)
+                SearchTerm = sTerm
+                //SearchResults = ListBuilder(selectedCounties,sTerm,sMunicip).ToPagedList(page,size)
             };
 
             return View("SearchResults",query);
@@ -188,7 +188,7 @@ namespace Stipendium.Controllers
                 sQuery.Page = 1;
             }
 
-            sQuery.SearchResults = pagedList;
+            //sQuery.SearchResults = pagedList;
 
             return View(sQuery);
         }

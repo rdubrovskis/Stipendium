@@ -1,0 +1,37 @@
+﻿@model Stipendium.Models.Stiftelse
+@using System.Globalization;
+
+@{
+    ViewBag.Title = Model.Stiftelsenamn;
+}
+<style>
+    h5{
+        font-size: 16px;
+    }
+</style>
+
+<h3>@Html.DisplayFor(model => model.Stiftelsenamn)</h3>
+
+<div>
+    <hr />
+
+    <h4>@Html.DisplayFor(model => model.Stiftelsenamn)</h4>
+    <h5>@Html.DisplayFor(model => model.Adress)</h5>
+    @if (Model.CoAdress != null)
+    {
+        <h5>@Html.DisplayFor(model => model.CoAdress)</h5>
+    }
+    <h5>@Html.DisplayFor(model => model.Postnr) @Html.DisplayFor(model => model.Postadress)</h5>
+    <br />
+    <h5>Org.Nr: @Html.DisplayFor(model => model.Orgnr)</h5>
+    <br />
+    <p>@Html.DisplayFor(model => model.Ändamål)</p>
+    <br />
+    <p>Förmögenhet: @double.Parse(Model.Förmögenhet).ToString("C0", new CultureInfo("sv-SE"))</p>
+
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

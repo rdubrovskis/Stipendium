@@ -4,6 +4,8 @@ namespace Stipendium.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using Stipendium.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<Stipendium.Models.ApplicationDbContext>
@@ -21,6 +23,32 @@ namespace Stipendium.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+            db.Stiftelses.RemoveRange(db.Stiftelses);
+
+            var Store = new UserStore<ApplicationUser>(context);
+            var UserManager = new UserManager<ApplicationUser>(Store);
+            var AppUserManager = new ApplicationUserManager(Store);
+            var RoleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+
+
+            string roleName = "Admin";
+            IdentityResult roleResult;
+
+            if(!RoleManager.RoleExists(roleName))
+            {
+                roleResult = RoleManager.Create(new IdentityRole(roleName));
+            }
+
+            var admin = new ApplicationUser() { Email = "admin@stipendium.se", UserName = "admin@stipendium.se" };
+
+            if(UserManager.FindByEmail("admin@stipendium.se") == null)
+            {
+                UserManager.Create(admin, "admin1");
+                //context.Users.AddOrUpdate(admin);
+                UserManager.AddToRole(admin.Id, "Admin");
+            }
+            
+
 
             for (int i = 0; i < 10; i++)
             {
@@ -45,6 +73,8 @@ namespace Stipendium.Migrations
                 db.SaveChanges();
 
             }
+
+
         }
     }
 }

@@ -7,7 +7,7 @@
     var query = ViewData["Query"] ?? new SearchQuery();
     string items = "";
 
-    foreach (var item in Model.ToList())
+    foreach (var item in Model.SearchResults.ToList())
     {
         items = items + item.ID + "&";
 
@@ -34,7 +34,7 @@
 
 <br />
 
-<p>Total records: @Model.TotalItemCount</p>
+<p>Total records: @Model.SearchResults.TotalItemCount</p>
 
 <div class="pagination">
 @Html.PagedListPager(Model, page => Url.Action("NewPage", new { page = page, size = Model.PageSize, items = ViewData["IDs"] }))
@@ -56,7 +56,7 @@
         @*<th></th>*@
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.SearchResults)
     {
         <tr>
             <td>

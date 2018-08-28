@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LinqToExcel, Version=1.11.0.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\LinqToExcel.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
@@ -52,9 +55,20 @@
     <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Remotion, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Data.Linq, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Data.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Interfaces, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -203,7 +217,23 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\StiftelsesController.cs" />
     <Compile Include="Controllers\StipendsController.cs" />
+    <Compile Include="ExcelEN.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExcelEN.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExcelEN.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExcelEN.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExcelEN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExcelEN.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -219,6 +249,34 @@
     <Compile Include="Migrations\201808231152558_Added_WebSite_2_Stipend.Designer.cs">
       <DependentUpon>201808231152558_Added_WebSite_2_Stipend.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808241303105_Stiftelse.cs" />
+    <Compile Include="Migrations\201808241303105_Stiftelse.Designer.cs">
+      <DependentUpon>201808241303105_Stiftelse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808270653547_Stiftelse_Stiftelsenr_2_String.cs" />
+    <Compile Include="Migrations\201808270653547_Stiftelse_Stiftelsenr_2_String.Designer.cs">
+      <DependentUpon>201808270653547_Stiftelse_Stiftelsenr_2_String.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808271401475_SearchQuery_Stipends_2_Stiftelse.cs" />
+    <Compile Include="Migrations\201808271401475_SearchQuery_Stipends_2_Stiftelse.Designer.cs">
+      <DependentUpon>201808271401475_SearchQuery_Stipends_2_Stiftelse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808271442134_Stiftelse_capital_string_2_double.cs" />
+    <Compile Include="Migrations\201808271442134_Stiftelse_capital_string_2_double.Designer.cs">
+      <DependentUpon>201808271442134_Stiftelse_capital_string_2_double.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808271503542_decimal.cs" />
+    <Compile Include="Migrations\201808271503542_decimal.Designer.cs">
+      <DependentUpon>201808271503542_decimal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808271507019_integer.cs" />
+    <Compile Include="Migrations\201808271507019_integer.Designer.cs">
+      <DependentUpon>201808271507019_integer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808271510358_backtostring.cs" />
+    <Compile Include="Migrations\201808271510358_backtostring.Designer.cs">
+      <DependentUpon>201808271510358_backtostring.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Counties.cs" />
@@ -227,25 +285,47 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Municipality.cs" />
     <Compile Include="Models\SearchQuery.cs" />
+    <Compile Include="Models\Stiftelse.cs" />
     <Compile Include="Models\Stipend.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Stiftelses.cs">
+      <DependentUpon>ExcelEN.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="ExcelEN.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ExcelEN.edmx</DependentUpon>
+      <LastGenOutput>ExcelEN.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ExcelEN.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ExcelEN.edmx</DependentUpon>
+      <LastGenOutput>ExcelEN.cs</LastGenOutput>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Excel.ico" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="libman.json" />
+    <EntityDeploy Include="ExcelEN.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ExcelEN.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="ExcelEN.edmx.diagram">
+      <DependentUpon>ExcelEN.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -297,9 +377,14 @@
     <Content Include="Views\Stipends\Edit.cshtml" />
     <Content Include="Views\Stipends\Index.cshtml" />
     <Content Include="Views\Stipends\SearchResults.cshtml" />
+    <Content Include="Views\Stiftelses\Index.cshtml" />
+    <Content Include="Views\Stiftelses\UploadExcel.cshtml" />
+    <Content Include="Views\Stiftelses\SearchResults.cshtml" />
+    <Content Include="Views\Stiftelses\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Doc\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -324,6 +409,33 @@
     <EmbeddedResource Include="Migrations\201808231152558_Added_WebSite_2_Stipend.resx">
       <DependentUpon>201808231152558_Added_WebSite_2_Stipend.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808241303105_Stiftelse.resx">
+      <DependentUpon>201808241303105_Stiftelse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808270653547_Stiftelse_Stiftelsenr_2_String.resx">
+      <DependentUpon>201808270653547_Stiftelse_Stiftelsenr_2_String.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808271401475_SearchQuery_Stipends_2_Stiftelse.resx">
+      <DependentUpon>201808271401475_SearchQuery_Stipends_2_Stiftelse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808271442134_Stiftelse_capital_string_2_double.resx">
+      <DependentUpon>201808271442134_Stiftelse_capital_string_2_double.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808271503542_decimal.resx">
+      <DependentUpon>201808271503542_decimal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808271507019_integer.resx">
+      <DependentUpon>201808271507019_integer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808271510358_backtostring.resx">
+      <DependentUpon>201808271510358_backtostring.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

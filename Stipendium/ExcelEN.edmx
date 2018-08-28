@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Stiftelse.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Stiftelses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Stiftelsenr" Type="int" Nullable="false" />
+          <Property Name="Aktnr" Type="nvarchar(max)" />
+          <Property Name="Orgnr" Type="nvarchar(max)" />
+          <Property Name="Län" Type="nvarchar(max)" />
+          <Property Name="Stiftelsenamn" Type="nvarchar(max)" />
+          <Property Name="Kommun" Type="nvarchar(max)" />
+          <Property Name="Adress" Type="nvarchar(max)" />
+          <Property Name="CoAdress" Type="nvarchar(max)" />
+          <Property Name="Postnr" Type="nvarchar(max)" />
+          <Property Name="Postadress" Type="nvarchar(max)" />
+          <Property Name="Telefon" Type="nvarchar(max)" />
+          <Property Name="Stiftelsetyp" Type="nvarchar(max)" />
+          <Property Name="Status" Type="nvarchar(max)" />
+          <Property Name="År" Type="nvarchar(max)" />
+          <Property Name="Förmögenhet" Type="nvarchar(max)" />
+          <Property Name="Ändamål" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityContainer Name="StiftelseStoreContainer">
+          <EntitySet Name="Stiftelses" EntityType="Self.Stiftelses" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Stiftelse" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Stiftelses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Stiftelsenr" Type="Int32" Nullable="false" />
+          <Property Name="Aktnr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Orgnr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Län" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Stiftelsenamn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Kommun" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Adress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CoAdress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Postnr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Postadress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Telefon" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Stiftelsetyp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="År" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Förmögenhet" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Ändamål" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Stiftelses" EntityType="Self.Stiftelses" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="StiftelseStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Stiftelses">
+            <EntityTypeMapping TypeName="Stiftelse.Stiftelses">
+              <MappingFragment StoreEntitySet="Stiftelses">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Stiftelsenr" ColumnName="Stiftelsenr" />
+                <ScalarProperty Name="Aktnr" ColumnName="Aktnr" />
+                <ScalarProperty Name="Orgnr" ColumnName="Orgnr" />
+                <ScalarProperty Name="Län" ColumnName="Län" />
+                <ScalarProperty Name="Stiftelsenamn" ColumnName="Stiftelsenamn" />
+                <ScalarProperty Name="Kommun" ColumnName="Kommun" />
+                <ScalarProperty Name="Adress" ColumnName="Adress" />
+                <ScalarProperty Name="CoAdress" ColumnName="CoAdress" />
+                <ScalarProperty Name="Postnr" ColumnName="Postnr" />
+                <ScalarProperty Name="Postadress" ColumnName="Postadress" />
+                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+                <ScalarProperty Name="Stiftelsetyp" ColumnName="Stiftelsetyp" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="År" ColumnName="År" />
+                <ScalarProperty Name="Förmögenhet" ColumnName="Förmögenhet" />
+                <ScalarProperty Name="Ändamål" ColumnName="Ändamål" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
