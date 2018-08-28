@@ -16,7 +16,7 @@ namespace Stipendium
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Stipends", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Stiftelses", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

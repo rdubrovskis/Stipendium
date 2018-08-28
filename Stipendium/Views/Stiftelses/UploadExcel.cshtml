@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Progress = 1;
+}
+
+<style>
+    #loader{
+        display:none;
+    }
+    .lds-ring {
+        display: inline-block;
+        margin: 5px;
+        position: relative;
+        width: 64px;
+        height: 64px;
+    }
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 51px;
+  height: 51px;
+  margin: 6px;
+  border: 6px solid #000000;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #000000 transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+</style>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+<h2>Index</h2>
+
+<hr />
+@Html.ValidationSummary()
+
+@using (Html.BeginForm("UploadExcel", "Stiftelses", FormMethod.Post, new { enctype = "multipart/form-data", id="myform", onsubmit = "return myFunction()" }))
+{
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="control-label col-md-2">Download Format:</div>
+            <div class="col-md-10">
+                <a href="/User/DownloadExcel/"><img src="~/Images/Excel.ico" width="25" height="25" title="Download Excel format" alt="excel" /></a>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+
+            <div class="control-label col-md-2">Excel:</div>
+            <div class="col-md-10">
+                <input type="file" id="FileUpload" name="FileUpload" class="" /> <div id="loader" style="align-items: center; display:none"><div class="lds-ring" style=""><div></div><div></div><div></div><div></div></div> <span>Please wait while worksheet is processed...</span></div>
+                @if (ViewBag.ErrorMsg != null)
+                {
+                    <br />
+                    <p style="color:red">@ViewBag.ErrorMsg</p>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Upload" id="btnSubmit" class="btn btn-primary" />
+
+            </div>
+        </div>
+    </div>
+}
+
+
+@if(ViewBag.Successes!= 0 && ViewBag.Successes != null)
+{
+    <h3 style="color:forestgreen">Success!</h3>
+    <h4>Transfer to database complete with:</h4>
+    <p>@ViewBag.Successes entries added</p>
+    if(ViewBag.Failures != null && ViewBag.Failures > 0)
+    {
+        <p>@ViewBag.Failures entries discarded</p>
+    }
+}
+<script>
+
+    function myFunction() {
+        $("#loader").css("display", "flex");
+    }
+
+</script>

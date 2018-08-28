@@ -32,5 +32,7 @@ namespace Stipendium.Models
 
         object placeHolderVariable;
         public System.Data.Entity.DbSet<Stipendium.Models.Stipend> Stipends { get; set; }
+
+        public System.Data.Entity.DbSet<Stipendium.Models.Stiftelse> Stiftelses { get; set; }
     }
 }

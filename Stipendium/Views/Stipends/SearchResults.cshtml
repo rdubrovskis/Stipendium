@@ -78,7 +78,7 @@
   5,
   10,
   15
-}), new { @class = "form-control" })
+}), new { @class = "form-control" } )
         </div>
         <div class="form-group">
             <input type="submit" value="Sök" class="btn btn-default" style="width:75px; background-color: #337ab7; color: white; border: none;" />
@@ -158,6 +158,10 @@
         if (checkboxCheck() === true) {
             $(".county-check").prop("checked", true);
         }
+
+
+        $("#ItemsPerPage").val(@Model.ItemsPerPage);
+        $("#Page").val(@Model.Page);
     });
 
     function checkboxCheck() {

@@ -13,6 +13,6 @@ namespace Stipendium.Models
         public string SearchMunicipality { get; set; }
         public int ItemsPerPage { get; set; }
         public int Page { get; set; }
-        public IPagedList<Stipend> SearchResults { get; set; }
+        public IPagedList<Stiftelse> SearchResults { get; set; }
     }
 }
