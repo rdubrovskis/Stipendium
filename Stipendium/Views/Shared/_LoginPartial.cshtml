@@ -1,16 +1,36 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Stipendium.Models
+
+<style>
+    .dropdown-item {
+        display: block;
+        padding: .25rem 1.5rem;
+    }
+    .dropdown-divider {
+        height: 0;
+        margin: .5rem 0;
+        overflow: hidden;
+        border-top: 1px solid #e9ecef;
+    }
+</style>
 <ul class="nav navbar-nav" style="float:right">
     <li class="nav-item dropdown">
         <a style="font-size: 16px" nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
         <div class="dropdown-menu dropdown-menu-right" style="padding: 10px; min-width: 200px">
             @if (Request.IsAuthenticated)
             {
-                <ul type="none">
-                    <li><span class="glyphicon glyphicon-pencil"></span> @Html.ActionLink("Manage", "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "dropdown-item", title = "Manage" })</li>
-                    <li><span class="glyphicon glyphicon-open-file"></span> @Html.ActionLink("Upload", "UploadExcel", "Stiftelses")</li>
-                </ul>
-                
+                <a class="dropdown-item" href="/Manage/Index"><span class="glyphicon glyphicon-pencil"></span> Manage</a>
+                <a class="dropdown-item" href="/Stiftelses/UploadExcel"><span class="glyphicon glyphicon-open-file"></span> Upload</a>
+                <div class="dropdown-divider"></div>
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "dropdown-item" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <a href="javascript:document.getElementById('logoutForm').submit()">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                        Logout
+                    </a>
+                }
+
             }
             else
             {

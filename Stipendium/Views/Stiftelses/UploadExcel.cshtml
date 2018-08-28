@@ -68,9 +68,13 @@
 
             <div class="control-label col-md-2">Excel:</div>
             <div class="col-md-10">
-                <input type="file" id="FileUpload" name="FileUpload" class="" /> <div id ="loader" style="align-items: center; display:none"><div class="lds-ring" style=""><div></div><div></div><div></div><div></div></div> <span>Please wait while worksheet is processed...</span></div>
+                <input type="file" id="FileUpload" name="FileUpload" class="" /> <div id="loader" style="align-items: center; display:none"><div class="lds-ring" style=""><div></div><div></div><div></div><div></div></div> <span>Please wait while worksheet is processed...</span></div>
+                @if (ViewBag.ErrorMsg != null)
+                {
+                    <br />
+                    <p style="color:red">@ViewBag.ErrorMsg</p>
+                }
             </div>
-            @Html.ValidationSummary()
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -95,7 +99,7 @@
 <script>
 
     function myFunction() {
-        $("#loader").css("display","flex")
+        $("#loader").css("display", "flex");
     }
 
 </script>

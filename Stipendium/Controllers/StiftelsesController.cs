@@ -220,11 +220,12 @@ namespace Stipendium.Controllers
                                         Ändamål = a["Ändamål"]
 
                                     };
+
+                                    TU.Förmögenhet = TU.Förmögenhet == "" ? "0" : TU.Förmögenhet;
                                     db.Stiftelses.Add(TU);
 
                                     db.SaveChanges();
 
-                                    ViewBag.Progress = ViewBag.Progress + 1;
                                     succeeded++;
 
                                 }
@@ -271,13 +272,13 @@ namespace Stipendium.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, new Exception("Only .xls and .xlsx file formats allowed"));
+                    ViewBag.ErrorMsg = "Only .xls and .xlsx file formats allowed";
                     return View();
                 }
             }
             else
             {
-                ModelState.AddModelError(string.Empty, new Exception("Please select a file"));
+                ViewBag.ErrorMsg = "No file selected";
                 return View();
             }
         }
