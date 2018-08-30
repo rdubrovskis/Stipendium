@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Stipendium.Models
@@ -79,9 +80,40 @@ namespace Stipendium.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public DateTime RegistrationDate { get { return DateTime.Now; } }
     }
 
-    public class ResetPasswordViewModel
+    public class RegisterPrivateViewModel : RegisterViewModel
+    {
+
+        [Required]
+        [Display(Name = "Förnamn")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Efternamn")]
+        public string LastName { get; set; }
+
+        public string Address { get; set; }
+
+        [Display(Name = "Post Nr.")]
+        public string PostNr { get; set; }
+
+        [Display(Name = "Ort")]
+        public string City { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Telefon Nr")]
+        public string PhoneNumber { get; set; }
+    }
+
+    public class RegisterCompanyViewModel : RegisterViewModel
+    {
+        public virtual Stiftelse Stiftelse { get; set; }
+    }
+
+        public class ResetPasswordViewModel
     {
         [Required]
         [EmailAddress]

@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Registration";
+}
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+
+<br />
+<div id="regContainer">
+    <h2>Register</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>Medlemstyp:</dt>
+                <dd><input type="radio" name="medlemstyp" value="privat" /> Privatperson</dd>
+                <dd><input type="radio" name="medlemstyp" value="foretag" /> Företag</dd>
+                <dd> <button class="btn btn-default" href="#" id="next">Next</button></dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var inbox = '@Url.Action("Register", "Account")';
+
+
+    $("#next").click(function () {
+
+        if ($("input[name='medlemstyp']:checked").val() === "privat") {
+            privat();
+        }
+
+        if ($("input[name='medlemstyp']:checked").val() === "foretag") {
+            foretag();
+        }
+    });
+
+
+    function privat() {
+            $('#regContainer').load('@Url.Action("RegisterPrivate", "Account")');
+    }
+
+    function foretag() {
+            $('#regContainer').load('@Url.Action("RegisterCompany", "Account")');
+        }
+</script>

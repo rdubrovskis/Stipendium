@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -15,6 +16,7 @@ namespace Stipendium.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ManageController()
         {
@@ -333,7 +335,59 @@ namespace Stipendium.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        public ActionResult EditPrivUser (int? id)
+        {
+
+            if (User.IsInRole("Admin"))
+            {
+                return View(db.Users.Find(id));
+            }
+            else
+            {
+                return View(db.Users.Find(User.Identity.GetUserId()));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPrivUser(PrivateUser user)
+        {
+            user.UserName = user.Email;
+            UserManager.Update(user);
+            return RedirectToAction("Index");
+
+        }
+
+        public ActionResult EditCompUser (int? id)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return View(db.Users.Find(id));
+            }
+            else
+            {
+                return View(db.Users.Find(User.Identity.GetUserId()));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCompUser(CompanyUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(user.Stiftelse).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            user.UserName = user.Email;
+            UserManager.Update(user);
+
+            
+
+            return RedirectToAction("Index");
+        }
+
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 

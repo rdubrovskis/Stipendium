@@ -22,7 +22,6 @@ namespace Stipendium.Controllers
         Counties counties = new Counties();
 
         // GET: Stiftelses
-        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var query = new SearchQuery
@@ -37,6 +36,7 @@ namespace Stipendium.Controllers
         }
 
         // GET: Stiftelses/Details/5
+        [CustomAuthorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -54,7 +54,7 @@ namespace Stipendium.Controllers
         // GET: Stiftelses/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView();
         }
 
         // POST: Stiftelses/Create

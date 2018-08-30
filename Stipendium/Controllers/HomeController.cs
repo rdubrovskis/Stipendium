@@ -26,5 +26,16 @@ namespace Stipendium.Controllers
 
             return View();
         }
+
+        public ActionResult Join()
+        {
+            return View();
+        }
+
+        public ActionResult Registration()
+        {
+            return View();
+        }
+
     }
 }
