@@ -80,6 +80,7 @@ namespace Stipendium.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    model.LastActivityDate = DateTime.Now;
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

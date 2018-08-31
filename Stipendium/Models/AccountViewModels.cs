@@ -61,6 +61,8 @@ namespace Stipendium.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public DateTimeOffset LastActivityDate { get; set; }
     }
 
     public class RegisterViewModel

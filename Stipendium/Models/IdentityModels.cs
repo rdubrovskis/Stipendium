@@ -15,6 +15,7 @@ namespace Stipendium.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Registered since")]
         public DateTime RegistrationDate { get { return DateTime.Now; } }
+        public DateTimeOffset LastActivityDate { get; set; }
 
 
 

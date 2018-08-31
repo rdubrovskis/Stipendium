@@ -21,6 +21,7 @@
             @Html.DisplayNameFor(model => model.UserName)
         </th>
         <th>Role</th>
+        <th>Registration Date</th>
         <th></th>
     </tr>
 
@@ -42,6 +43,10 @@
                 <span>Privatperson</span>
             }
         </td>
+        <td>
+            @Html.DisplayFor(modelItem=> item.RegistrationDate)
+        </td>
+        <td>@item.LastActivityDate</td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
