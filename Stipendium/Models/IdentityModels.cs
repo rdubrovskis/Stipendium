@@ -68,5 +68,7 @@ namespace Stipendium.Models
         public System.Data.Entity.DbSet<Stipendium.Models.Stiftelse> Stiftelses { get; set; }
 
         public System.Data.Entity.DbSet<Stipendium.Models.PrivateUser> ApplicationUsers { get; set; }
+
+        public System.Data.Entity.DbSet<Stipendium.Models.Pageviews> Pageviews { get; set; }
     }
 }

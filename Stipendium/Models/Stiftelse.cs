@@ -33,5 +33,7 @@ namespace Stipendium.Models
         [DataType(DataType.Currency)]
         public string Förmögenhet { get; set; }
         public string Ändamål { get; set; }
+
+        public DateTime DateAdded { get; set; }
     }
 }

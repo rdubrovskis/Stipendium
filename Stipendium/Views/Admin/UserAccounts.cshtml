@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Stipendium.Models.ApplicationUser>
-    @using System.Security.AccessControl
+@using System.Security.AccessControl
 @using Stipendium.Models;
 
 @{
@@ -22,10 +22,15 @@
         </th>
         <th>Role</th>
         <th>Registration Date</th>
+        <th>Last Activity</th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
+        var lastActivityDifference = @DateTimeOffset.Now.Subtract(item.LastActivityDate);
+        string role = item.Roles.Count > 0 ? db.Roles.Find(item.Roles.Single().RoleId).Name : "";
+
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Email)
@@ -34,9 +39,9 @@
             @Html.DisplayFor(modelItem => item.UserName)
         </td>
         <td>
-            @if (item.Roles.Count > 0)
+            @if (role != "")
             {
-                @db.Roles.Find(item.Roles.First().RoleId).Name
+                @role
             }
             else
             {
@@ -44,15 +49,58 @@
             }
         </td>
         <td>
-            @Html.DisplayFor(modelItem=> item.RegistrationDate)
+            @Html.DisplayFor(modelItem => item.RegistrationDate)
         </td>
-        <td>@item.LastActivityDate</td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @if (lastActivityDifference.Days < 1)
+            {
+                if (lastActivityDifference.Hours > 0)
+                {
+                    <span>@lastActivityDifference.Hours hours ago</span>
+                }
+                else
+                {
+                    <span>Less than an hour ago</span>
+                }
+            }
+            else
+            {<span>@lastActivityDifference.Days days ago</span>}
         </td>
+        <td>
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-triangle-bottom"></span>
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    @if (role != null)
+                    {
+                        if (role == "Företag")
+                        {
+                            <div class="dropdown-item"><span class="glyphicon glyphicon-pencil"></span><a href="@Url.Action("EditCompUser","Manage", new { id = item.Id})"> Edit</a></div>
+
+                        }
+                        else if (role == "Admin")
+                        {
+                            <div class="dropdown-item"><span class="glyphicon glyphicon-pencil"></span><a href="@Url.Action("EditAdmin","Admin", new { idNr = item.Id})"> Edit</a></div>
+                        }
+
+                        else
+                        {
+                            <div class="dropdown-item"><span class="glyphicon glyphicon-pencil"></span><a href="@Url.Action("EditPrivUser","Manage", new { id = item.Id})"> Edit</a></div>
+                        }
+
+                        <div class="dropdown-item"><span class="glyphicon glyphicon-trash"></span>@Html.ActionLink(" Delete", "Delete", new { id = item.Id })</div>
+                    }
+                </div>
+            </div>
+
+        </td>
+
     </tr>
-}
+    }
+
+
 
 </table>
+

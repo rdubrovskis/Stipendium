@@ -81,6 +81,9 @@ namespace Stipendium.Controllers
             {
                 case SignInStatus.Success:
                     model.LastActivityDate = DateTime.Now;
+                    var user = db.Users.Where(u => u.Email == model.Email).FirstOrDefault();
+                    user.LastActivityDate = DateTime.Now;
+                    db.SaveChanges();
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -484,6 +487,9 @@ namespace Stipendium.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            user.LastActivityDate = DateTime.Now;
+            db.SaveChanges();
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -334,8 +336,29 @@ namespace Stipendium.Controllers
 
             base.Dispose(disposing);
         }
+        public ActionResult Edit (string id)
+        {
+            var user = db.Users.Find(id);
+            
 
-        public ActionResult EditPrivUser (int? id)
+            if(user.Roles.Count!=0)
+            {
+                var role = db.Roles.Find(user.Roles.Single().RoleId);
+                if(role.Name == "Företag")
+                { return RedirectToAction("EditCompUser", id); }
+                else
+                {
+                    return RedirectToAction("EditAdmin","Admin", new {id =id });
+                }
+            }
+            else
+            {
+                return RedirectToAction("EditPrivUser", "Manage", new { id = id });
+            }
+        }
+
+
+        public ActionResult EditPrivUser (string id)
         {
 
             if (User.IsInRole("Admin"))
@@ -353,12 +376,13 @@ namespace Stipendium.Controllers
         public ActionResult EditPrivUser(PrivateUser user)
         {
             user.UserName = user.Email;
-            UserManager.Update(user);
+            db.Users.AddOrUpdate(user);
+            db.SaveChanges();
             return RedirectToAction("Index");
 
         }
 
-        public ActionResult EditCompUser (int? id)
+        public ActionResult EditCompUser (string id)
         {
             if (User.IsInRole("Admin"))
             {

@@ -1,18 +1,16 @@
-﻿using System;
+﻿using LinqToExcel;
+using PagedList;
+using Stipendium.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.Data.OleDb;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Stipendium.Models;
-using LinqToExcel;
-using System.Data.SqlClient;
-using System.Data.OleDb;
-using System.Data.Entity.Validation;
-using PagedList;
 
 namespace Stipendium.Controllers
 {
@@ -27,7 +25,7 @@ namespace Stipendium.Controllers
             var query = new SearchQuery
             {
                 SelectedCounties = counties.List.ToArray(),
-                SearchResults = db.Stiftelses.ToList().OrderByDescending(s=>s.Förmögenhet).ToPagedList(1, 25),
+                SearchResults = db.Stiftelses.ToList().OrderByDescending(s => s.Förmögenhet).ToPagedList(1, 25),
                 Page = 1,
                 ItemsPerPage = 25
             };
@@ -48,6 +46,25 @@ namespace Stipendium.Controllers
             {
                 return HttpNotFound();
             }
+
+            Pageviews pViews;
+
+            if (db.Pageviews.Where(p=>p.Stiftelse.Id == id).Count() != 0)
+            {
+                pViews = db.Pageviews.First(p => p.Stiftelse.Id == id);
+                pViews.ViewCount++;
+            }
+            else
+            {
+                pViews = new Pageviews
+                {
+                    ViewCount = 1,
+                    Stiftelse = db.Stiftelses.Find(id)
+                };
+                db.Pageviews.Add(pViews);
+            }
+            db.SaveChanges();
+
             return View(stiftelse);
         }
 
@@ -178,8 +195,8 @@ namespace Stipendium.Controllers
 
                     //string sheetName = "Norrbotten";
 
-                        int succeeded = 0;
-                        int failed = 0;
+                    int succeeded = 0;
+                    int failed = 0;
 
                     var excelFile = new ExcelQueryFactory(pathToExcelFile);
                     //var firstRow = excelFile.WorksheetNoHeader().First();
@@ -191,14 +208,16 @@ namespace Stipendium.Controllers
 
                         DataTable dtable = ds.Tables[sheet];
                         var region = from a in excelFile.Worksheet(sheet) select a;
-                        
+
                         List<string> errors = new List<string>();
 
                         foreach (var a in region)
                         {
                             try
                             {
-                                if (a["Stiftelsenr"] != "" && a["Aktnr"] != "" && a["Stiftelsenamn"] != "")
+                                string stiftNr = a["Stiftelsenr"];
+
+                                if (a["Stiftelsenr"] != "" && a["Aktnr"] != "" && a["Stiftelsenamn"] != "" && db.Stiftelses.Where(s=>s.Stiftelsenr == stiftNr).Count() == 0)
                                 {
                                     Stiftelse TU = new Stiftelse
                                     {
@@ -217,7 +236,8 @@ namespace Stipendium.Controllers
                                         Status = a["Status"],
                                         År = a["År"].ToString(),
                                         Förmögenhet = a["Förmögenhet"],
-                                        Ändamål = a["Ändamål"]
+                                        Ändamål = a["Ändamål"],
+                                        DateAdded = DateTime.Now
 
                                     };
 
