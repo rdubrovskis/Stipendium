@@ -14,13 +14,19 @@
     }
 </style>
 <ul class="nav navbar-nav" style="float:right">
+    @if (Request.IsAuthenticated)
+    {
+        <li class="nav-item" style="display:flex"><span style="padding: 15px; color:white;">Logged in as: @User.Identity.GetUserName()</span></li>
+    }
+    
     <li class="nav-item dropdown">
         <a style="font-size: 16px" nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
         <div class="dropdown-menu dropdown-menu-right" style="padding: 10px; min-width: 200px">
-            @if (Request.IsAuthenticated)
+            @if (Request.IsAuthenticated && User.IsInRole("Admin"))
             {
                 <a class="dropdown-item" href="/Manage/Index"><span class="glyphicon glyphicon-pencil"></span> Manage</a>
                 <a class="dropdown-item" href="/Stiftelses/UploadExcel"><span class="glyphicon glyphicon-open-file"></span> Upload</a>
+                <a class="dropdown-item" href="/Admin/UserAccounts"><span class="glyphicon glyphicon-user"></span> Manage Users</a>
                 <div class="dropdown-divider"></div>
                 using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "dropdown-item" }))
                 {

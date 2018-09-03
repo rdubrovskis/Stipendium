@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "Users";
+}
+
+@section scripts{
+
+    <script src="~/Scripts/StipendiumClient.js"></script>
+}
+
+    <style>
+        .card {
+            position: relative;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-clip: border-box;
+            border: 1px solid rgba(0,0,0,.125);
+            border-radius: .25rem;
+        }
+
+        .card-header:first-child {
+            border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+        }
+
+        .card-header {
+            padding: .75rem 1.25rem;
+            margin-bottom: 0;
+            background-color: rgba(0,0,0,.03);
+            border-bottom: 1px solid rgba(0,0,0,.125);
+        }
+
+        .card-body {
+            -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+            padding: 1.25rem;
+        }
+    </style>
+
+<div ng-app="StipendiumApp" class="container">
+    <br />
+    <input type="text" placeholder="Search User" ng-model="searchUser" />
+    <br />
+    <br />
+    <div ng-controller="StipendiumController">
+
+        <h2>{{title}}</h2>
+        <br />
+        <ul class="users">
+            <li ng-repeat="user in users" type="none">
+                <div class="card text-white bg-primary mb-3" style="max-width: 30rem; margin-bottom: 20px">
+                    <div class="card-header">
+                        <span class="glyphicon glyphicon-user"></span> Role
+                        <div class="dropdown show">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span style="color:white;" class="glyphicon glyphicon-triangle-bottom"></span>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+                                <div class="dropdown-item"><span class="glyphicon glyphicon-pencil"></span><a href="@Url.Action("Edit","Manage")/{{user.Id}}"> Edit</a></div>
+                                <div class="dropdown-item"><span class="glyphicon glyphicon-trash"></span><a href="@Url.Action("Delete")/{{user.Id}}">Delete</a></div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{user.UserName}}</h5>
+                        <p class="card-text">{{user.Id}}</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        @*<table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>UserName</th>
+                </tr>
+                <tr ng-repeat="r in users | filter: searchUser ">
+                    <td>{{r.Id}}</td>
+                    <td>{{r.Email}}</td>
+                    <td>
+                        {{r.UserName}}
+                    </td>
+                </tr>
+            </table>*@
+    </div>
+</div>

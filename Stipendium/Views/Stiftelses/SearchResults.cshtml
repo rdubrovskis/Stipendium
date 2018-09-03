@@ -137,7 +137,7 @@
     {
         <tr>
             <td>
-                @Html.ActionLink(item.Stiftelsenamn, "Details", new { id = item.Id }, new { style = "color: #333; text-decoration: underline;" })
+                @Html.ActionLink(item.Stiftelsenamn, "Details", new { id = item.Id }, new { style = "color: #333; text-decoration: underline;" }) @if(item.DateAdded!= null && item.DateAdded >= DateTimeOffset.Now.AddDays(-7)){<span class="label label-success">New!</span>}
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ändamål)

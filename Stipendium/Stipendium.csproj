@@ -215,8 +215,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PageviewsController.cs" />
     <Compile Include="Controllers\StiftelsesController.cs" />
     <Compile Include="Controllers\StipendsController.cs" />
     <Compile Include="ExcelEN.Context.cs">
@@ -277,13 +279,27 @@
     <Compile Include="Migrations\201808271510358_backtostring.Designer.cs">
       <DependentUpon>201808271510358_backtostring.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808310722034_LastActivityDate.cs" />
+    <Compile Include="Migrations\201808310722034_LastActivityDate.Designer.cs">
+      <DependentUpon>201808310722034_LastActivityDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809031015024_PageViews.cs" />
+    <Compile Include="Migrations\201809031015024_PageViews.Designer.cs">
+      <DependentUpon>201809031015024_PageViews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809031103488_Stiftelses_DateAdded.cs" />
+    <Compile Include="Migrations\201809031103488_Stiftelses_DateAdded.Designer.cs">
+      <DependentUpon>201809031103488_Stiftelses_DateAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Counties.cs" />
     <Compile Include="Models\County.cs" />
+    <Compile Include="Models\CustomAuthorize.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Municipality.cs" />
+    <Compile Include="Models\Pageviews.cs" />
     <Compile Include="Models\SearchQuery.cs" />
     <Compile Include="Models\Stiftelse.cs" />
     <Compile Include="Models\Stipend.cs" />
@@ -313,6 +329,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\Excel.ico" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -326,6 +345,10 @@
     <Content Include="ExcelEN.edmx.diagram">
       <DependentUpon>ExcelEN.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\angular.min.js.map" />
+    <None Include=".bin\git.cmd" />
+    <None Include=".bin\node.cmd" />
+    <None Include=".bin\npm.cmd" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -337,6 +360,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\StipendiumClient.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -381,10 +405,24 @@
     <Content Include="Views\Stiftelses\UploadExcel.cshtml" />
     <Content Include="Views\Stiftelses\SearchResults.cshtml" />
     <Content Include="Views\Stiftelses\Details.cshtml" />
+    <Content Include="Views\Home\Join.cshtml" />
+    <Content Include="Views\Home\Registration.cshtml" />
+    <Content Include="Views\Stiftelses\Create.cshtml" />
+    <Content Include="Views\Account\RegisterCompany.cshtml" />
+    <Content Include="Views\Account\RegisterPrivate.cshtml" />
+    <Content Include="Views\Admin\UserAccounts.cshtml" />
+    <Content Include="Views\Manage\EditPrivUser.cshtml" />
+    <Content Include="Views\Manage\EditCompUser.cshtml" />
+    <Content Include="Views\Admin\Delete.cshtml" />
+    <Content Include="Views\Admin\Users.cshtml" />
+    <Content Include="Views\Admin\EditAdmin.cshtml" />
+    <Content Include="Views\Home\_MostPopular.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Doc\" />
+    <Folder Include="Views\Pageviews\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -429,6 +467,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808271510358_backtostring.resx">
       <DependentUpon>201808271510358_backtostring.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808310722034_LastActivityDate.resx">
+      <DependentUpon>201808310722034_LastActivityDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809031015024_PageViews.resx">
+      <DependentUpon>201809031015024_PageViews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809031103488_Stiftelses_DateAdded.resx">
+      <DependentUpon>201809031103488_Stiftelses_DateAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

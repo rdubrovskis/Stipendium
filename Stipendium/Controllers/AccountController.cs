@@ -17,6 +17,7 @@ namespace Stipendium.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -79,6 +80,10 @@ namespace Stipendium.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    model.LastActivityDate = DateTime.Now;
+                    var user = db.Users.Where(u => u.Email == model.Email).FirstOrDefault();
+                    user.LastActivityDate = DateTime.Now;
+                    db.SaveChanges();
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -139,7 +144,7 @@ namespace Stipendium.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            return PartialView();
         }
 
         //
@@ -157,6 +162,97 @@ namespace Stipendium.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
+                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegisterPrivate()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterPrivate(RegisterPrivateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new PrivateUser { UserName = model.Email, Email = model.Email, Address = model.Address, City = model.City, FirstName = model.FirstName, LastName = model.LastName, PhoneNumber = model.PhoneNumber, PostNr = model.PostNr };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegisterCompany()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterComp(RegisterCompanyViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new CompanyUser { UserName = model.Email, Email = model.Email };
+                user.Stiftelse = new Stiftelse
+                {
+                    Adress = model.Stiftelse.Adress,
+                    Aktnr=model.Stiftelse.Aktnr,
+                    CoAdress = model.Stiftelse.CoAdress,
+                    Förmögenhet = model.Stiftelse.Förmögenhet,
+                    Kommun = model.Stiftelse.Kommun,
+                    Län = model.Stiftelse.Län,
+                    Orgnr = model.Stiftelse.Orgnr,
+                    Postadress = model.Stiftelse.Postadress,
+                    Postnr = model.Stiftelse.Postnr,
+                    Stiftelsenamn = model.Stiftelse.Stiftelsenamn,
+                    Stiftelsenr = model.Stiftelse.Stiftelsenr,
+                    Telefon = model.Stiftelse.Telefon,
+                    Ändamål = model.Stiftelse.Ändamål,
+                    År = model.Stiftelse.År,
+                };
+
+                db.SaveChanges();
+
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    var id = UserManager.Users.Where(u => u.Email == user.Email).FirstOrDefault().Id;
+                    UserManager.AddToRole(user.Id, "Företag");
+
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -391,6 +487,9 @@ namespace Stipendium.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            user.LastActivityDate = DateTime.Now;
+            db.SaveChanges();
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }

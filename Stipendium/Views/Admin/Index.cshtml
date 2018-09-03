@@ -1,0 +1,66 @@
+﻿@using Stipendium.Models
+@{
+    ViewBag.Title = "Index";
+    ApplicationDbContext db = new ApplicationDbContext();
+}
+
+@section scripts{
+
+    <script src="~/Scripts/StipendiumClient.js"></script>
+}
+
+<style>
+    .col-md-3 {
+        padding: 0px;
+        margin: 3px 10px;
+    }
+</style>
+
+<h2>Index</h2>
+<div class="row">
+    <div class="panel panel-primary col-md-3">
+        <div class="panel-heading">Stiftelses</div>
+        <div class="panel-body">@db.Stiftelses.Count() in record</div>
+    </div>
+    <div class="panel panel-primary col-md-3">
+        <div class="panel-heading">Users</div>
+        <div class="panel-body">@db.Users.Count() in record</div>
+    </div>
+
+</div>
+<div class="row" ng-app="StipendiumApp">
+    <div class="panel panel-primary col-md-3">
+        <div class="panel-heading">Most Popular</div>
+        <div class="panel-body">
+            <div style="width:100%; padding:0px">
+                <div ng-controller="StipendiumController">
+                    <table class="table">
+                        <tr ng-repeat="r in stiftelse">
+                            <td>#{{r.Id}}</td>
+                            <td>{{r.Stiftelse.Stiftelsenamn}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary col-md-3">
+        <div class="panel-heading">Inactive</div>
+        <div class="panel-body">
+            <div style="width:100%; padding:0px">
+                <div ng-controller="UsersController">
+                    <table class="table">
+                        <tr ng-repeat="r in users">
+                            <td>{{r.Email}}</td>
+                        </tr>
+                        <tr>
+                            <td><a href="/Admin/UserAccounts">Manage</a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
