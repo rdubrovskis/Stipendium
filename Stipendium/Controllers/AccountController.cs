@@ -69,11 +69,16 @@ namespace Stipendium.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            if (User.IsInRole("Admin"))
+            {
+                returnUrl = "~/Admin/Index";
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
+            
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -84,7 +89,14 @@ namespace Stipendium.Controllers
                     var user = db.Users.Where(u => u.Email == model.Email).FirstOrDefault();
                     user.LastActivityDate = DateTime.Now;
                     db.SaveChanges();
-                    return RedirectToLocal(returnUrl);
+                    if (user.Roles.Count()>0 && user.Roles.Single().RoleId == db.Roles.Single(r=>r.Name == "Admin").Id)
+                    {
+                        return RedirectToLocal("~/Admin/Index");
+                    }
+                    else
+                    {
+                        return RedirectToLocal(returnUrl);
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

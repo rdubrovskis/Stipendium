@@ -7,10 +7,32 @@ StipendiumApp.controller('StipendiumController', function ($scope, StipendiumSer
     $scope.title = "Stipendium Users";
 
     getStiftelser();
+    getUsers();
+    getSearches();
+
+    function getUsers() {
+        StipendiumService.getUsers().then(function (input) {
+            $scope.users = input.data;
+            console.log(input);
+        }), function (error) {
+            $scope.status = 'Unable to get users: ' + error.message;
+            console.log("Error");
+        };
+    }
 
     function getStiftelser() {
         StipendiumService.getStiftelses().then(function (input) {
             $scope.stiftelse = input.data;
+            console.log(input);
+        }), function (error) {
+            $scope.status = 'Unable to get Stiftelses: ' + error.message;
+            console.log("Error");
+        };
+    }
+
+    function getSearches() {
+        StipendiumService.getSearches().then(function (input) {
+            $scope.searches = input.data;
             console.log(input);
         }), function (error) {
             $scope.status = 'Unable to load customer data: ' + error.message;
@@ -20,17 +42,11 @@ StipendiumApp.controller('StipendiumController', function ($scope, StipendiumSer
 });
 
 StipendiumApp.controller('UsersController', function ($scope, StipendiumService) {
-    getUsers();
 
-    function getUsers() {
-        StipendiumService.getUsers().then(function (input) {
-            $scope.users = input.data;
-            console.log(input);
-        }), function (error) {
-            $scope.status = 'Unable to load customer data: ' + error.message;
-            console.log("Error");
-        };
-    }
+});
+
+StipendiumApp.controller('UsersController', function ($scope, StipendiumService) {
+
 });
 
 StipendiumApp.factory('StipendiumService', ['$http', function ($http) {
@@ -49,7 +65,13 @@ StipendiumApp.factory('StipendiumService', ['$http', function ($http) {
 
     };
 
+    StipendiumService.getSearches = function () {
+        return $http.get('/SearchTerms/PopularSearches');
+    };
+
     return StipendiumService;
 
 }]);
+
+
 

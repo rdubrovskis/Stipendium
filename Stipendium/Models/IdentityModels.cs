@@ -63,12 +63,13 @@ namespace Stipendium.Models
         }
 
         object placeHolderVariable;
-        public System.Data.Entity.DbSet<Stipendium.Models.Stipend> Stipends { get; set; }
 
         public System.Data.Entity.DbSet<Stipendium.Models.Stiftelse> Stiftelses { get; set; }
 
         public System.Data.Entity.DbSet<Stipendium.Models.PrivateUser> ApplicationUsers { get; set; }
 
         public System.Data.Entity.DbSet<Stipendium.Models.Pageviews> Pageviews { get; set; }
+
+        public System.Data.Entity.DbSet<Stipendium.Models.SearchTerm> SearchTerms { get; set; }
     }
 }

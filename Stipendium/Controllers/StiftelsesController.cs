@@ -305,6 +305,11 @@ namespace Stipendium.Controllers
 
         public List<Stiftelse> ListBuilder(string[] counties, string sTerm, string sMunicip)
         {
+            if(!string.IsNullOrWhiteSpace(sTerm))
+            {
+                AddSearchTerm(sTerm);
+            }
+
             List<Stiftelse> ResultsList = new List<Stiftelse>();
             if (counties != null)
             {
@@ -360,5 +365,22 @@ namespace Stipendium.Controllers
 
             return View(sQuery);
         }
+
+        public void AddSearchTerm (string term)
+        {
+            var exists = db.SearchTerms.Where(s => s.Term == term).FirstOrDefault();
+            if(exists == null)
+            {
+                db.SearchTerms.Add(new SearchTerm {Term = term, LastSearched = DateTime.Now, TimesSearched = 1 });
+                db.SaveChanges();
+            }
+            else
+            {
+                exists.LastSearched = DateTime.Now;
+                exists.TimesSearched++;
+                db.SaveChanges();
+            }
+        }
+
     }
 }

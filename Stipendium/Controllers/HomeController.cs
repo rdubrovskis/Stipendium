@@ -13,7 +13,10 @@ namespace Stipendium.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var list = db.Pageviews.ToList().OrderByDescending(i => i.ViewCount);
+            var topTen = list.Take(10);
+
+            return View(topTen);
         }
 
         public ActionResult About()
