@@ -127,17 +127,20 @@
         <th>
             Förmögenhet (SEK)
         </th>
+        @if(User.IsInRole("Admin"))
+        {
         <th>
+            Last Modified
+        </th> 
+        }
 
-        </th>
-        @*<th></th>*@
     </tr>
 
     @foreach (var item in Model.SearchResults)
     {
         <tr>
             <td>
-                @Html.ActionLink(item.Stiftelsenamn, "Details", new { id = item.Id }, new { style = "color: #333; text-decoration: underline;" }) @if(item.DateAdded!= null && item.DateAdded >= DateTimeOffset.Now.AddDays(-7)){<span class="label label-success">New!</span>}
+                @Html.ActionLink(item.Stiftelsenamn, "Details", new { id = item.Id }, new { style = "color: #333; text-decoration: underline;" }) @if(item.DateCreated!= null && item.DateCreated >= DateTimeOffset.Now.AddDays(-7)){<span class="label label-success">New!</span>}
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ändamål)
@@ -145,7 +148,11 @@
             <td>
                 @double.Parse(item.Förmögenhet).ToString("C0",new CultureInfo("sv-SE"))
             </td>
-            <td></td>
+            @if(User.IsInRole("Admin"))
+            {
+            <td>@Html.DisplayFor(modelItem => item.LastModified) @if (item.DateCreated != null && item.LastModified >= DateTime.Now.AddDays(-7)){<span class="label label-success">Updated!</span>}</td>
+            }
+            
             @*<td >
                     @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
                     @Html.ActionLink("Details", "Details", new { id = item.ID }) |

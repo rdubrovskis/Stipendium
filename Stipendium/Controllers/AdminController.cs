@@ -3,10 +3,13 @@ using Microsoft.AspNet.Identity.Owin;
 using Stipendium.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace Stipendium.Controllers
 {
@@ -145,7 +148,46 @@ namespace Stipendium.Controllers
             DateTimeOffset cutoff = DateTime.Now.AddDays(-30);
             list = db.Users.Where(u => u.LastActivityDate.CompareTo(cutoff) < 0).ToList();
 
+
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult DeleteNonTrending()
+        {
+            SqlCommand cmd = new SqlCommand("OutdatedSearches", new SqlConnection());
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Connection.ConnectionString = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=aspnet-Stipendium-20180821113020;Integrated Security=True";
+            cmd.Connection.Open();
+            cmd.ExecuteReader();
+            return Json("succ", JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RecentlyModified()
+        {
+            var cutoff = DateTime.Now.AddDays(-7);
+            var list = db.Stiftelses.Where(s => s.LastModified > cutoff).ToArray();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult EmailConfirmationTemplate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EmailConfirmationTemplate(string Body, string Subject)
+        {
+            XmlDocument doc = new XmlDocument();
+            string strAppPath = AppDomain.CurrentDomain.BaseDirectory;
+            doc.Load(strAppPath + "\\ConfirmationEmail.xml");
+
+
+            doc.SelectSingleNode("/Email/Subject").InnerText = Subject;
+            doc.SelectSingleNode("/Email/Body").InnerText = Body;
+            doc.Save(strAppPath + "\\ConfirmationEmail.xml");
+            return RedirectToAction("Index");
+        }
+
     }
 }
