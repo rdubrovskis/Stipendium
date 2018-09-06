@@ -64,6 +64,9 @@
     <Reference Include="Remotion.Interfaces, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
       <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="SendGrid, Version=9.8.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sendgrid.9.9.0\lib\net452\SendGrid.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -279,6 +282,18 @@
     <Compile Include="Migrations\201808271510358_backtostring.Designer.cs">
       <DependentUpon>201808271510358_backtostring.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808290929467_userTypes.cs" />
+    <Compile Include="Migrations\201808290929467_userTypes.Designer.cs">
+      <DependentUpon>201808290929467_userTypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808291020241_datetime.cs" />
+    <Compile Include="Migrations\201808291020241_datetime.Designer.cs">
+      <DependentUpon>201808291020241_datetime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808301356419_CompanyVModel.cs" />
+    <Compile Include="Migrations\201808301356419_CompanyVModel.Designer.cs">
+      <DependentUpon>201808301356419_CompanyVModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201808310722034_LastActivityDate.cs" />
     <Compile Include="Migrations\201808310722034_LastActivityDate.Designer.cs">
       <DependentUpon>201808310722034_LastActivityDate.cs</DependentUpon>
@@ -294,6 +309,14 @@
     <Compile Include="Migrations\201809040838297_SearchTerms.cs" />
     <Compile Include="Migrations\201809040838297_SearchTerms.Designer.cs">
       <DependentUpon>201809040838297_SearchTerms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809041340539_LastModified_2_Stiftelse.cs" />
+    <Compile Include="Migrations\201809041340539_LastModified_2_Stiftelse.Designer.cs">
+      <DependentUpon>201809041340539_LastModified_2_Stiftelse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809041355074_Stiftelse_Dates.cs" />
+    <Compile Include="Migrations\201809041355074_Stiftelse_Dates.Designer.cs">
+      <DependentUpon>201809041355074_Stiftelse_Dates.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -312,6 +335,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="angular-editor-master\example\index.html" />
+    <Content Include="angular-editor-master\javascripts\angular-editor.js" />
+    <Content Include="angular-editor-master\javascripts\simditor\module.js" />
+    <Content Include="angular-editor-master\javascripts\simditor\simditor-all.js" />
+    <Content Include="angular-editor-master\javascripts\simditor\simditor.js" />
+    <Content Include="angular-editor-master\javascripts\simditor\uploader.js" />
+    <Content Include="angular-editor-master\stylesheets\font-awesome.css" />
+    <Content Include="angular-editor-master\stylesheets\simditor.css" />
+    <Content Include="ConfirmationEmail.xml" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -351,6 +383,11 @@
     <None Include=".bin\git.cmd" />
     <None Include=".bin\node.cmd" />
     <None Include=".bin\npm.cmd" />
+    <Content Include="angular-editor-master\bower.json" />
+    <Content Include="angular-editor-master\fonts\fontawesome-webfont.woff" />
+    <Content Include="angular-editor-master\LICENSE" />
+    <Content Include="angular-editor-master\README.md" />
+    <None Include="Properties\PublishProfiles\Stipendium - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -414,6 +451,7 @@
     <Content Include="Views\Admin\EditAdmin.cshtml" />
     <Content Include="Views\Home\_MostPopular.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\EmailConfirmationTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -465,6 +503,15 @@
     <EmbeddedResource Include="Migrations\201808271510358_backtostring.resx">
       <DependentUpon>201808271510358_backtostring.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808290929467_userTypes.resx">
+      <DependentUpon>201808290929467_userTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808291020241_datetime.resx">
+      <DependentUpon>201808291020241_datetime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808301356419_CompanyVModel.resx">
+      <DependentUpon>201808301356419_CompanyVModel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808310722034_LastActivityDate.resx">
       <DependentUpon>201808310722034_LastActivityDate.cs</DependentUpon>
     </EmbeddedResource>
@@ -476,6 +523,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809040838297_SearchTerms.resx">
       <DependentUpon>201809040838297_SearchTerms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809041340539_LastModified_2_Stiftelse.resx">
+      <DependentUpon>201809041340539_LastModified_2_Stiftelse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809041355074_Stiftelse_Dates.resx">
+      <DependentUpon>201809041355074_Stiftelse_Dates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

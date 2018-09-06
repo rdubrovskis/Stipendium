@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Stipendium.Models
 {
@@ -34,6 +35,8 @@ namespace Stipendium.Models
         public string Förmögenhet { get; set; }
         public string Ändamål { get; set; }
 
-        public DateTime DateAdded { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime DateCreated { get; set; }
+        public DateTime? LastModified { get; set; }
     }
 }

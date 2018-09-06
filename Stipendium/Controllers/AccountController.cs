@@ -5,6 +5,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
+using System.Xml.Linq;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -172,14 +174,7 @@ namespace Stipendium.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
+                    await SendConfirmationEmail(user);
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -206,14 +201,7 @@ namespace Stipendium.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
+                    await SendConfirmationEmail(user);
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -260,17 +248,7 @@ namespace Stipendium.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var id = UserManager.Users.Where(u => u.Email == user.Email).FirstOrDefault().Id;
-                    UserManager.AddToRole(user.Id, "Företag");
-
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
+                    await SendConfirmationEmail(user);
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -532,6 +510,27 @@ namespace Stipendium.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        public async Task SendConfirmationEmail(ApplicationUser user)
+        {
+            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+
+            XmlDocument doc = new XmlDocument();
+            string strAppPath = AppDomain.CurrentDomain.BaseDirectory;
+            doc.Load(strAppPath +"\\ConfirmationEmail.xml");
+            
+
+            string msgSubject = doc.SelectSingleNode("/Email/Subject").InnerText;
+            string msgBody = doc.SelectSingleNode("/Email/Body").InnerText;
+
+            var callbackUrl = Url.Action("ConfirmEmail", "Account",
+               new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(user.Id,
+               msgSubject, msgBody + "<br />" + "Click <a href=\""
+               + callbackUrl + "\">here</a> to confirm your e-mail address");
         }
 
         #region Helpers

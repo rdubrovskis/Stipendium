@@ -237,7 +237,7 @@ namespace Stipendium.Controllers
                                         År = a["År"].ToString(),
                                         Förmögenhet = a["Förmögenhet"],
                                         Ändamål = a["Ändamål"],
-                                        DateAdded = DateTime.Now
+                                        LastModified = DateTime.Now
 
                                     };
 

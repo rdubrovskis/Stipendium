@@ -400,6 +400,7 @@ namespace Stipendium.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Stiftelse.LastModified = DateTime.Now;
                 db.Entry(user.Stiftelse).State = EntityState.Modified;
                 db.SaveChanges();
             }

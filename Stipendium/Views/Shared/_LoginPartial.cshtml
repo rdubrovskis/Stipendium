@@ -24,12 +24,17 @@
     <li class="nav-item dropdown">
         <a style="font-size: 16px" nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
         <div class="dropdown-menu dropdown-menu-right" style="padding: 10px; min-width: 200px">
-            @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+
+            @if (User.IsInRole("Admin"))
             {
                 <a class="dropdown-item" href="/Admin/Index"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
-                <a class="dropdown-item" href="/Manage/Index"><span class="glyphicon glyphicon-pencil"></span> Manage</a>
                 <a class="dropdown-item" href="/Stiftelses/UploadExcel"><span class="glyphicon glyphicon-open-file"></span> Upload</a>
                 <a class="dropdown-item" href="/Admin/UserAccounts"><span class="glyphicon glyphicon-user"></span> Manage Users</a>
+
+            }
+            @if (Request.IsAuthenticated)
+            {
+                <a class="dropdown-item" href="/Manage/Index"><span class="glyphicon glyphicon-pencil"></span> Manage</a>
                 <div class="dropdown-divider"></div>
                 using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "dropdown-item" }))
                 {
@@ -39,8 +44,8 @@
                         Logout
                     </a>
                 }
-
             }
+
             else
             {
                 using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -77,7 +82,7 @@
                     <br />
 
                     <p>
-                        @Html.ActionLink("Register as a new user", "Register")
+                        @Html.ActionLink("Register as a new user", "Registration","Home")
                     </p>
                     @* Enable this once you have account confirmation enabled for password reset functionality
                 <p>

@@ -1,0 +1,61 @@
+﻿@using System.Xml
+@{
+    ViewBag.Title = "EmailConfirmationTemplate";
+
+    XmlDocument doc = new XmlDocument();
+    string strAppPath = AppDomain.CurrentDomain.BaseDirectory;
+    doc.Load(strAppPath + "\\ConfirmationEmail.xml");
+
+
+    string msgSubject = doc.SelectSingleNode("/Email/Subject").InnerText;
+    string msgBody = doc.SelectSingleNode("/Email/Body").InnerText;
+}
+
+<style>
+    .medium-toolbar-arrow-under:after {
+        border-color: #2f1e07 transparent transparent;
+        border-width: 8px 8px 0;
+    }
+</style>
+
+<script src="//cdn.jsdelivr.net/npm/medium-editor@latest/dist/js/medium-editor.min.js"></script>
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/medium-editor@latest/dist/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
+
+<br />
+@*<button onclick="clicko()"></button>
+    <div class="editable" id="markup"></div>
+    <script>var editor = new MediumEditor('.editable');</script>
+
+    <script>
+        function clicko() {
+            var markupstring = document.getElementById('markup')[0].innerHTML;
+        };
+    </script>*@
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-2">
+            <span>Subject: </span>
+        </div>
+        <div class="col-md-10">
+            @Html.TextBox("Subject", msgSubject, new { style = "width: 50%" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <span>Body: </span>
+        </div>
+        <div class="col-md-10">
+            @Html.TextArea("Body", msgBody, new { cols = "55", rows = "10" })
+        </div>
+    </div>
+
+
+
+
+    <input type="submit" value="Save" class="btn btn-default" />
+}

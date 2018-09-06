@@ -9,6 +9,7 @@ StipendiumApp.controller('StipendiumController', function ($scope, StipendiumSer
     getStiftelser();
     getUsers();
     getSearches();
+    getRecent();
 
     function getUsers() {
         StipendiumService.getUsers().then(function (input) {
@@ -33,6 +34,16 @@ StipendiumApp.controller('StipendiumController', function ($scope, StipendiumSer
     function getSearches() {
         StipendiumService.getSearches().then(function (input) {
             $scope.searches = input.data;
+            console.log(input);
+        }), function (error) {
+            $scope.status = 'Unable to load customer data: ' + error.message;
+            console.log("Error");
+        };
+    }
+
+    function getRecent() {
+        StipendiumService.getRecents().then(function (input) {
+            $scope.recentUpdates = input.data;
             console.log(input);
         }), function (error) {
             $scope.status = 'Unable to load customer data: ' + error.message;
@@ -67,6 +78,10 @@ StipendiumApp.factory('StipendiumService', ['$http', function ($http) {
 
     StipendiumService.getSearches = function () {
         return $http.get('/SearchTerms/PopularSearches');
+    };
+
+    StipendiumService.getRecents = function () {
+        return $http.get('/Admin/RecentlyModified');
     };
 
     return StipendiumService;

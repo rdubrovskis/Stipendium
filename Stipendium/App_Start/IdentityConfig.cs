@@ -11,16 +11,45 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Stipendium.Models;
+using SendGrid;
+using System.Net;
+using System.Configuration;
+using System.Diagnostics;
+using SendGrid.Helpers.Mail;
 
 namespace Stipendium
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            await configSendGridasync(message);
         }
+        private async Task configSendGridasync(IdentityMessage message)
+        {
+            var apiKey = ConfigurationManager.AppSettings["SendGridAPIKey"];
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("noreply@stipendium.se", "Stipendium");
+            var subject = message.Subject;
+            var to = new EmailAddress(message.Destination);
+            var plainTextContent = message.Body;
+            var htmlContent = message.Body;
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+
+            // Send the email.
+            if (client != null)
+            {
+                await client.SendEmailAsync(msg);
+            }
+            else
+            {
+                Trace.TraceError("Failed to create Web transport.");
+                await Task.FromResult(0);
+            }
+
+        }
+
     }
 
     public class SmsService : IIdentityMessageService
@@ -106,4 +135,5 @@ namespace Stipendium
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
+
 }

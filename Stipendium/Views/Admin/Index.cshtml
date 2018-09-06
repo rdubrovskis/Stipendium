@@ -17,12 +17,12 @@
     }
 </style>
 
-
 <h2>Index</h2>
 <div class="row">
     <div class="panel panel-primary col-md-3">
         <div class="panel-heading">Stiftelses</div>
-        <div class="panel-body">@db.Stiftelses.Count() in record</div>
+        <div class="panel-body">@db.Stiftelses.Count() in record 
+        </div>
     </div>
 
     <div class="panel panel-primary col-md-3">
@@ -41,57 +41,76 @@
 
 </div>
 
+<div ng-app="StipendiumApp" ng-controller="StipendiumController">
+    <div class="row">
+        <div class="panel panel-primary col-md-3">
+            <div class="panel-heading">Most Popular</div>
+            <div class="panel-body">
+                <div style="width:100%; padding:0px">
+                    <div>
+                        <table class="table">
+                            <tr ng-repeat="r in stiftelse">
+                                <td>#{{r.Id}}</td>
+                                <td>{{r.Stiftelse.Stiftelsenamn}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="row" ng-app="StipendiumApp" ng-controller="StipendiumController">
-    <div class="panel panel-primary col-md-3">
-        <div class="panel-heading">Most Popular</div>
-        <div class="panel-body">
-            <div style="width:100%; padding:0px">
-                <div>
-                    <table class="table">
-                        <tr ng-repeat="r in stiftelse">
-                            <td>#{{r.Id}}</td>
-                            <td>{{r.Stiftelse.Stiftelsenamn}}</td>
-                        </tr>
-                    </table>
+        <div class="panel panel-primary col-md-3">
+            <div class="panel-heading">Inactive</div>
+            <div class="panel-body">
+                <div style="width:100%; padding:0px">
+                    <div>
+                        <table class="table">
+                            <tr ng-repeat="r in users">
+                                <td>{{r.Email}}</td>
+                            </tr>
+                            <tr>
+                                <td><a href="/Admin/UserAccounts">Manage</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-primary col-md-3">
+            <div class="panel-heading">Trending search terms</div>
+            <div class="panel-body">
+                <div style="width:100%; padding:0px">
+                    <div>
+                        <table class="table">
+                            <tr ng-repeat="r in searches track by $index">
+                                <td>#{{$index + 1}}</td>
+                                <td>{{r.Term}}</td>
+                                <td>{{r.TimesSearched}} times</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row" >
+        <div class="panel panel-primary col-md-3">
+            <div class="panel-heading">{{recentUpdates.length}} recently updated</div>
+            <div class="panel-body">
+                <div style="width:100%; padding:0px">
+                    <div>
+                        <table class="table">
+                            <tr ng-repeat="r in recentUpdates">
+                                <td>{{r.Stiftelsenamn}}</td>
+                                <td><a href="/Stiftelses/Details/{{r.Id}}">Go</a></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="panel panel-primary col-md-3">
-        <div class="panel-heading">Inactive</div>
-        <div class="panel-body">
-            <div style="width:100%; padding:0px">
-                <div>
-                    <table class="table">
-                        <tr ng-repeat="r in users">
-                            <td>{{r.Email}}</td>
-                        </tr>
-                        <tr>
-                            <td><a href="/Admin/UserAccounts">Manage</a></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel panel-primary col-md-3">
-        <div class="panel-heading">Trending search terms</div>
-        <div class="panel-body">
-            <div style="width:100%; padding:0px">
-                <div>
-                    <table class="table">
-                        <tr ng-repeat="r in searches track by $index">
-                            <td>#{{$index + 1}}</td>
-                            <td>{{r.Term}}</td>
-                            <td>{{r.TimesSearched}} times</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
