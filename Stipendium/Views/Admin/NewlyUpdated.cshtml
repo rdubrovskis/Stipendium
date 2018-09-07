@@ -1,0 +1,66 @@
+﻿@using PagedList.Mvc
+@using Stipendium.Models
+@model  PagedList.IPagedList<Stiftelse>
+
+@{
+    ViewBag.Title = "NewlyUpdated";
+}
+
+<h2>Newly Updated</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="pagination" style="margin-left: 400px">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+    of @Model.PageCount   @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Stiftelsenr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Stiftelsenamn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Ändamål)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().DateCreated)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().LastModified)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stiftelsenr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stiftelsenamn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ändamål)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModified)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -103,9 +103,14 @@
                 <div style="width:100%; padding:0px">
                     <div>
                         <table class="table">
-                            <tr ng-repeat="r in recentUpdates">
+                            <tr ng-repeat="r in recentUpdates | limitTo: 10">
                                 <td>{{r.Stiftelsenamn}}</td>
                                 <td><a href="/Stiftelses/Details/{{r.Id}}">Go</a></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    @Html.ActionLink("See all","NewlyUpdated")
+                                </td>
                             </tr>
                         </table>
                     </div>
