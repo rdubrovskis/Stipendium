@@ -16,9 +16,11 @@ using System.Net;
 using System.Configuration;
 using System.Diagnostics;
 using SendGrid.Helpers.Mail;
+using System.Web.Helpers;
 
 namespace Stipendium
 {
+
     public class EmailService : IIdentityMessageService
     {
         public async Task SendAsync(IdentityMessage message)
@@ -30,7 +32,7 @@ namespace Stipendium
         {
             var apiKey = ConfigurationManager.AppSettings["SendGridAPIKey"];
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("noreply@stipendium.se", "Stipendium");
+            var from = new EmailAddress("noreply@stipendium.se", "No Reply");
             var subject = message.Subject;
             var to = new EmailAddress(message.Destination);
             var plainTextContent = message.Body;
@@ -45,12 +47,14 @@ namespace Stipendium
             else
             {
                 Trace.TraceError("Failed to create Web transport.");
+                
                 await Task.FromResult(0);
             }
 
         }
 
     }
+
 
     public class SmsService : IIdentityMessageService
     {

@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -176,10 +177,15 @@ namespace Stipendium.Controllers
                 {
 
 
-                    string filename = DateTime.Now.ToShortDateString() + "_" + FileUpload.FileName;
-                    string targetpath = Server.MapPath("~/Doc/");
-                    FileUpload.SaveAs(targetpath + filename);
-                    string pathToExcelFile = targetpath + filename;
+                    string filename = Path.GetFileName(FileUpload.FileName);
+                    string targetpath = Server.MapPath("~\\App_Data\\");
+                    if (!System.IO.Directory.Exists(targetpath))
+                    {
+                        System.IO.Directory.CreateDirectory(targetpath);
+                    }
+                    string pathToExcelFile = Path.Combine(targetpath + filename);
+                    FileUpload.SaveAs(pathToExcelFile);
+                     
                     var connectionString = "";
                     if (filename.EndsWith(".xls"))
                     {

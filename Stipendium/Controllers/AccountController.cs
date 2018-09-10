@@ -197,7 +197,7 @@ namespace Stipendium.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new PrivateUser { UserName = model.Email, Email = model.Email, Address = model.Address, City = model.City, FirstName = model.FirstName, LastName = model.LastName, PhoneNumber = model.PhoneNumber, PostNr = model.PostNr };
+                var user = new PrivateUser { UserName = model.Email, Email = model.Email, Address = model.Address, City = model.City, FirstName = model.FirstName, LastName = model.LastName, PhoneNumber = model.PhoneNumber, PostNr = model.PostNr, LastActivityDate = DateTime.Now };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -224,7 +224,7 @@ namespace Stipendium.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new CompanyUser { UserName = model.Email, Email = model.Email };
+                var user = new CompanyUser { UserName = model.Email, Email = model.Email,LastActivityDate = DateTime.Now };
                 user.Stiftelse = new Stiftelse
                 {
                     Adress = model.Stiftelse.Adress,

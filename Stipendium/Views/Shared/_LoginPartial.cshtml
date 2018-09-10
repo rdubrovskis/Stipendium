@@ -30,6 +30,7 @@
                 <a class="dropdown-item" href="/Admin/Index"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
                 <a class="dropdown-item" href="/Stiftelses/UploadExcel"><span class="glyphicon glyphicon-open-file"></span> Upload</a>
                 <a class="dropdown-item" href="/Admin/UserAccounts"><span class="glyphicon glyphicon-user"></span> Manage Users</a>
+                <a class="dropdown-item" href="/Admin/EmailConfirmationTemplate"><span class="glyphicon glyphicon-send"></span> E-mail confirmation template</a>
 
             }
             @if (Request.IsAuthenticated)
@@ -82,7 +83,7 @@
                     <br />
 
                     <p>
-                        @Html.ActionLink("Register as a new user", "Registration","Home")
+                        @Html.ActionLink("Register as a new user", "Registration", "Home")
                     </p>
                     @* Enable this once you have account confirmation enabled for password reset functionality
                 <p>

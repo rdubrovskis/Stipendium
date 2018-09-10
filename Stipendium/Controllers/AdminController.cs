@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Xml;
+using PagedList;
 
 namespace Stipendium.Controllers
 {
@@ -121,7 +122,7 @@ namespace Stipendium.Controllers
 
             db.Users.Remove(user);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("UserAccounts");
         }
 
         public ActionResult Users()
@@ -187,6 +188,14 @@ namespace Stipendium.Controllers
             doc.SelectSingleNode("/Email/Body").InnerText = Body;
             doc.Save(strAppPath + "\\ConfirmationEmail.xml");
             return RedirectToAction("Index");
+        }
+
+        public ActionResult NewlyUpdated()
+        {
+            var cutoff = DateTime.Now.AddDays(-7);
+            var list = db.Stiftelses.Where(s => s.LastModified > cutoff).ToArray();
+
+            return View(list.ToPagedList(1, 10));
         }
 
     }
