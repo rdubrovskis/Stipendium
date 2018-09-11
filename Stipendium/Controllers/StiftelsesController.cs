@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
-using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ExcelDataReader;
 
 namespace Stipendium.Controllers
 {
@@ -185,105 +185,68 @@ namespace Stipendium.Controllers
                     }
                     string pathToExcelFile = Path.Combine(targetpath + filename);
                     FileUpload.SaveAs(pathToExcelFile);
-                     
-                    var connectionString = "";
-                    if (filename.EndsWith(".xls"))
-                    {
-                        connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", pathToExcelFile);
-                    }
-                    else if (filename.EndsWith(".xlsx"))
-                    {
-                        connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
-                    }
-
-                    OleDbDataAdapter adapter;
-                    var ds = new DataSet();
-
-                    //string sheetName = "Norrbotten";
+                    var file = new FileInfo(pathToExcelFile);
 
                     int succeeded = 0;
                     int failed = 0;
 
                     var excelFile = new ExcelQueryFactory(pathToExcelFile);
-                    //var firstRow = excelFile.WorksheetNoHeader().First();
-                    foreach (var sheet in excelFile.GetWorksheetNames())
+                    using (var stream = System.IO.File.Open(pathToExcelFile, FileMode.Open, FileAccess.Read))
                     {
-                        string query = string.Format("SELECT * FROM [{0}$]", sheet);
-                        adapter = new OleDbDataAdapter(query, connectionString);
-                        adapter.Fill(ds, sheet);
 
-                        DataTable dtable = ds.Tables[sheet];
-                        var region = from a in excelFile.Worksheet(sheet) select a;
-
-                        List<string> errors = new List<string>();
-
-                        foreach (var a in region)
+                        // Auto-detect format, supports:
+                        //  - Binary Excel files (2.0-2003 format; *.xls)
+                        //  - OpenXml Excel files (2007 format; *.xlsx)
+                        using (var reader = ExcelReaderFactory.CreateReader(stream))
                         {
-                            try
+
+                            // 2. Use the AsDataSet extension method
+                            var result = reader.AsDataSet(new ExcelDataSetConfiguration() { ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration() { UseHeaderRow = true } });
+
+                            // The result of each spreadsheet is in result.Tables
+                            foreach (DataTable table in result.Tables)
                             {
-                                string stiftNr = a["Stiftelsenr"];
-
-                                if (a["Stiftelsenr"] != "" && a["Aktnr"] != "" && a["Stiftelsenamn"] != "" && db.Stiftelses.Where(s=>s.Stiftelsenr == stiftNr).Count() == 0)
+                                foreach (DataRow row in table.Rows)
                                 {
-                                    Stiftelse TU = new Stiftelse
+                                    string stiftNr = row["Stiftelsenr"].ToString();
+
+                                    if (row["Stiftelsenr"].ToString() != "" && row["Aktnr"].ToString() != "" && row["Stiftelsenamn"].ToString() != "" && db.Stiftelses.Where(s => s.Stiftelsenr == stiftNr).Count() == 0)
                                     {
-                                        Stiftelsenr = a["Stiftelsenr"],
-                                        Aktnr = a["Aktnr"],
-                                        Orgnr = a["Org#nr"],
-                                        Län = a["Län"],
-                                        Stiftelsenamn = a["Stiftelsenamn"],
-                                        Kommun = a["Kommun"],
-                                        Adress = a["Adress"],
-                                        CoAdress = a["C/o adress"],
-                                        Postnr = a["Postnr"],
-                                        Postadress = a["Postadress"],
-                                        Telefon = a["Telefon"],
-                                        Stiftelsetyp = a["Stiftelsetyp"],
-                                        Status = a["Status"],
-                                        År = a["År"].ToString(),
-                                        Förmögenhet = a["Förmögenhet"],
-                                        Ändamål = a["Ändamål"],
-                                        LastModified = DateTime.Now
+                                        var stift = new Stiftelse
+                                        {
+                                            Stiftelsenr = stiftNr,
+                                            Aktnr = row["Aktnr"].ToString(),
+                                            Orgnr = row["Org#nr"].ToString(),
+                                            Län = row["Län"].ToString(),
+                                            Stiftelsenamn = row["Stiftelsenamn"].ToString(),
+                                            Kommun = row["Kommun"].ToString(),
+                                            Adress = row["Adress"].ToString(),
+                                            CoAdress = row["C/o adress"].ToString(),
+                                            Postnr = row["Postnr"].ToString(),
+                                            Postadress = row["Postadress"].ToString(),
+                                            Telefon = row["Telefon"].ToString(),
+                                            Stiftelsetyp = row["Stiftelsetyp"].ToString(),
+                                            Status = row["Status"].ToString(),
+                                            År = row["År"].ToString(),
+                                            Förmögenhet = row["Förmögenhet"].ToString(),
+                                            Ändamål = row["Ändamål"].ToString(),
+                                            DateCreated = DateTime.Now,
+                                            LastModified = DateTime.Now
 
-                                    };
-
-                                    TU.Förmögenhet = TU.Förmögenhet == "" ? "0" : TU.Förmögenhet;
-                                    db.Stiftelses.Add(TU);
-
-                                    db.SaveChanges();
-
-                                    succeeded++;
-
-                                }
-                                else
-                                {
-                                    //data.Add("<ul>");
-                                    //if (a["Stiftelsenr"] == "" || a["Stiftelsenr"] == null) errors.Add("Stiftelsenr missing on row " + a.);
-                                    //if (a["Aktnr"] == "" || a["Aktnr"] == null) data.Add("<li> Address is required</li>");
-                                    //if (a["Org#nr"] == "" || a["Org#nr"] == null) data.Add("<li>ContactNo is required</li>");
-
-                                    //data.Add("</ul>");
-                                    //data.ToArray();
-                                    //return Json(data, JsonRequestBehavior.AllowGet);
-                                    failed++;
-                                }
-                            }
-
-                            catch (DbEntityValidationException ex)
-                            {
-                                foreach (var entityValidationErrors in ex.EntityValidationErrors)
-                                {
-
-                                    foreach (var validationError in entityValidationErrors.ValidationErrors)
-                                    {
-
-                                        Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
-
+                                        };
+                                        succeeded++;
+                                        db.Stiftelses.Add(stift);
+                                        db.SaveChanges();
                                     }
-
+                                    else
+                                    {
+                                        failed++;
+                                    }
                                 }
                             }
                         }
+
+                        
                     }
                     //deleting excel file from folder  
                     if ((System.IO.File.Exists(pathToExcelFile)))
