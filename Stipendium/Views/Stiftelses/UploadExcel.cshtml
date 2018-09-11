@@ -5,45 +5,34 @@
 }
 
 <style>
-    #loader{
+    .glyphicon-refresh{
         display:none;
     }
-    .lds-ring {
-        display: inline-block;
-        margin: 5px;
-        position: relative;
-        width: 64px;
-        height: 64px;
+
+    .glyphicon-refresh-animate {
+        -animation: spin .7s infinite linear;
+        -webkit-animation: spin2 .7s infinite linear;
     }
-.lds-ring div {
-  box-sizing: border-box;
-  display: block;
-  position: absolute;
-  width: 51px;
-  height: 51px;
-  margin: 6px;
-  border: 6px solid #000000;
-  border-radius: 50%;
-  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #000000 transparent transparent transparent;
-}
-.lds-ring div:nth-child(1) {
-  animation-delay: -0.45s;
-}
-.lds-ring div:nth-child(2) {
-  animation-delay: -0.3s;
-}
-.lds-ring div:nth-child(3) {
-  animation-delay: -0.15s;
-}
-@@keyframes lds-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+
+    @@-webkit-keyframes spin2 {
+        from {
+            -webkit-transform: rotate(0deg);
+        }
+
+        to {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @@keyframes spin {
+        from {
+            transform: scale(1) rotate(0deg);
+        }
+
+        to {
+            transform: scale(1) rotate(360deg);
+        }
+    }
 
 </style>
 <script src="~/Scripts/jquery-3.3.1.js"></script>
@@ -78,8 +67,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Upload" id="btnSubmit" class="btn btn-primary" />
-
+                 <button class="btn btn-default" id="Upload" type="submit"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><span id="btn-tag">Upload</span></button>
             </div>
         </div>
     </div>
@@ -97,6 +85,12 @@
     }
 }
 <script>
+
+    $("form").submit(function () {
+        
+        $("#btn-tag").html(" Loading...");
+        $(".glyphicon-refresh").css("display", "inline-block");
+    });
 
     function myFunction() {
         $("#loader").css("display", "flex");

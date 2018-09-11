@@ -16,7 +16,7 @@
                 <dt>Medlemstyp:</dt>
                 <dd><input type="radio" name="medlemstyp" value="privat" /> Privatperson</dd>
                 <dd><input type="radio" name="medlemstyp" value="foretag" /> Företag</dd>
-                <dd> <button class="btn btn-default" href="#" id="next">Next</button></dd>
+                <dd> <button class="btn btn-default" href="#" id="next">Next <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span></button></dd>
             </dl>
         </div>
     </div>
@@ -28,15 +28,18 @@
 
 
     $("#next").click(function () {
-
         if ($("input[name='medlemstyp']:checked").val() === "privat") {
+            $(".glyphicon-refresh").css("display", "inline-block");
             privat();
         }
 
-        if ($("input[name='medlemstyp']:checked").val() === "foretag") {
+        else if ($("input[name='medlemstyp']:checked").val() === "foretag") {
+            $(".glyphicon-refresh").css("display", "inline-block");
             foretag();
         }
     });
+
+
 
 
     function privat() {
@@ -47,3 +50,22 @@
             $('#regContainer').load('@Url.Action("RegisterCompany", "Account")');
         }
 </script>
+<style>
+    .glyphicon-refresh{
+        display:none;
+    }
+    .glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+</style>
