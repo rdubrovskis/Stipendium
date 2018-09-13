@@ -37,15 +37,18 @@
         </dd>
     </dl>
     <br />
-    
+
     <h4>Din stiftelse</h4>
     <hr />
-        @if (User.IsInRole("Företag"))
-        {
-            <div class="stiftelseContainer">
-                @{Html.RenderAction("DetailsPartial", "Stiftelses", new { id = ViewBag.StiftelseID });}
-            </div>
-        }
+    @if (User.IsInRole("Företag"))
+    {
+        <br />
+
+        <h4>Din stiftelse</h4>
+        <div class="stiftelseContainer">
+            @{Html.RenderAction("DetailsPartial", "Stiftelses", new { id = ViewBag.StiftelseID });}
+        </div>
+    }
 
 </div>
 <style>
