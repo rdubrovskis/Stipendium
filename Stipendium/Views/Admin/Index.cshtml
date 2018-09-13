@@ -11,7 +11,10 @@
 }
 
 <style>
-    .col-md-3 {
+    .col-md-4{
+
+    }
+    .col-md-3, .col-md-4 {
         padding: 0px;
         margin: 3px 10px;
     }
@@ -19,7 +22,7 @@
 
 <h2>Index</h2>
 <div class="row">
-    <div class="panel panel-primary col-md-3">
+    <div class="panel panel-primary col-md-4">
         <div class="panel-heading">Stiftelses</div>
         <div class="panel-body">@db.Stiftelses.Count() in record 
         </div>
@@ -43,15 +46,21 @@
 
 <div ng-app="StipendiumApp" ng-controller="StipendiumController">
     <div class="row">
-        <div class="panel panel-primary col-md-3">
+        <div class="panel panel-primary col-md-4">
             <div class="panel-heading">Most Popular</div>
             <div class="panel-body">
                 <div style="width:100%; padding:0px">
                     <div>
                         <table class="table">
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Views</th>
+                            </tr>
                             <tr ng-repeat="r in stiftelse">
                                 <td>#{{r.Id}}</td>
                                 <td>{{r.Stiftelse.Stiftelsenamn}}</td>
+                                <td>{{r.ViewCount}}</td>
                             </tr>
                         </table>
                     </div>
@@ -97,7 +106,7 @@
     </div>
 
     <div class="row" >
-        <div class="panel panel-primary col-md-3">
+        <div class="panel panel-primary col-md-4">
             <div class="panel-heading">{{recentUpdates.length}} recently updated</div>
             <div class="panel-body">
                 <div style="width:100%; padding:0px">

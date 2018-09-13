@@ -1,7 +1,7 @@
 ﻿@model Stipendium.Models.RegisterCompanyViewModel
     @using Stipendium.Models;
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Registrera";
     var selectList = new SelectList(new Counties().List);
 }
 
@@ -10,7 +10,7 @@
 @using (Html.BeginForm("RegisterComp", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
+    <h4>Skapa nytt konto</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <fieldset>
@@ -20,7 +20,7 @@
             <div class="col-md-10">
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 <span class="form-text text-muted">
-                    Make sure the e-mail is valid
+                    Se till att e-postadressen är giltig
                 </span>
             </div>
         </div>
@@ -29,7 +29,7 @@
             <div class="col-md-10">
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                 <span class="form-text text-muted">
-                    The password must contain at least one number
+                    Lösenordet måste ha minst en siffer och en stor bokstav
                 </span>
             </div>
         </div>
@@ -72,7 +72,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Stiftelse.Län, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Stiftelse.Län, selectList, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.Stiftelse.Län, selectList, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Stiftelse.Län, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -168,7 +168,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Stiftelse.Ändamål, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Stiftelse.Ändamål, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Stiftelse.Ändamål, new { @class = "form-control", rows= 5 })
                 @Html.ValidationMessageFor(model => model.Stiftelse.Ändamål, "", new { @class = "text-danger" })
             </div>
         </div>

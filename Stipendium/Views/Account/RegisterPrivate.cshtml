@@ -8,7 +8,7 @@
 @using (Html.BeginForm("RegisterPrivate", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Skapa en nytt kontot</h4>
+    <h4>Skapa nytt konto</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">

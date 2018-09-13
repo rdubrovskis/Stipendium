@@ -8,6 +8,11 @@
     
 
 }
+<style>
+    .dropdown-menu {
+        min-width: 182px;
+    }
+</style>
 
 <h2>UserAccounts</h2>
 
@@ -76,8 +81,7 @@
                 }
                 else
                 {
-                    <span style="color:darkgoldenrod">Pending </span>
-                    <a href="#" onclick="Resend('@item.Id')" id="@item.Id">Resend?</a>
+                    <span id="@item.Id" style="color:darkgoldenrod">Pending </span>
                 }
             </td>
             <td>
@@ -105,6 +109,10 @@
                             }
 
                             <div class="dropdown-item"><span class="glyphicon glyphicon-trash"></span>@Html.ActionLink(" Delete", "Delete", new { id = item.Id })</div>
+                            if(!item.EmailConfirmed)
+                            { 
+                            <div class="dropdown-item"><span class="glyphicon glyphicon-envelope"></span><a href="#" onclick="Resend('@item.Id')"> Resend Confirmation</a></div>
+                            }
                         }
                     </div>
                 </div>

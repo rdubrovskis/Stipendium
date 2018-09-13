@@ -595,7 +595,7 @@ namespace Stipendium.Controllers
             {
                 string code = UserManager.GenerateEmailConfirmationToken(userid);
                 var callbackUrl = Url.Action("ConfirmEmail", "Account",
-                    new { userId = userid, code = code }, protocol: Request.Url.Scheme);
+                    new { userId = userid, code }, protocol: Request.Url.Scheme);
                 UserManager.SendEmail(userid, "E-mail confirmation",
                "Klicka <a href=\"" + callbackUrl + "\">här</a> för att bekräfta ditt e-post");
                 return new JsonResult { Data = "success", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
