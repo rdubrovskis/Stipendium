@@ -11,12 +11,15 @@ namespace Stipendium.Models
     {
         public int Id { get; set; }
         [Display(Name ="Stiftelse nr.")]
+        [Required]
         public string Stiftelsenr { get; set; }
+        [Required]
         [Display(Name = "Aktnummer")]
         public string Aktnr { get; set; }
         [Display(Name = "Organisations nummer")]
         public string Orgnr { get; set; }
         public string Län { get; set; }
+        [Required]
         [Display(Name = "Stiftelse Namn")]
         public string Stiftelsenamn { get; set; }
         public string Kommun { get; set; }
@@ -32,6 +35,7 @@ namespace Stipendium.Models
         public string Status { get; set; }
         public string År { get; set; }
         [DataType(DataType.Currency)]
+        [Required]
         public string Förmögenhet { get; set; }
         public string Ändamål { get; set; }
 

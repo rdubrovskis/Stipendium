@@ -327,6 +327,10 @@
     <Compile Include="Migrations\201809041355074_Stiftelse_Dates.Designer.cs">
       <DependentUpon>201809041355074_Stiftelse_Dates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809131330470_StiftelsesRequired.cs" />
+    <Compile Include="Migrations\201809131330470_StiftelsesRequired.Designer.cs">
+      <DependentUpon>201809131330470_StiftelsesRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Counties.cs" />
@@ -543,6 +547,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809041355074_Stiftelse_Dates.resx">
       <DependentUpon>201809041355074_Stiftelse_Dates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809131330470_StiftelsesRequired.resx">
+      <DependentUpon>201809131330470_StiftelsesRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

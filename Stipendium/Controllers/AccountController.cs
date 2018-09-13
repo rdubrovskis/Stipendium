@@ -230,7 +230,7 @@ namespace Stipendium.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RegisterComp(RegisterCompanyViewModel model)
+        public async Task<ActionResult> RegisterCompany(RegisterCompanyViewModel model)
         {
             if (ModelState.IsValid)
             {

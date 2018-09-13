@@ -69,6 +69,12 @@ namespace Stipendium.Controllers
             return View(stiftelse);
         }
 
+        public ActionResult DetailsPartial(int? id)
+        {
+            var stiftelse = db.Stiftelses.Find(id);
+            return PartialView("Details", stiftelse);
+        }
+
         // GET: Stiftelses/Create
         public ActionResult Create()
         {

@@ -66,6 +66,13 @@ namespace Stipendium.Controllers
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
+            if(User.IsInRole("Företag"))
+            {
+                var userid = User.Identity.GetUserId();
+                CompanyUser user = db.Users.OfType<CompanyUser>().Single(u => u.Id == userid);
+                ViewBag.StiftelseID = user.Stiftelse.Id;
+            }
+            
             if (id != ""&&User.IsInRole("Admin"))
             {
                 
