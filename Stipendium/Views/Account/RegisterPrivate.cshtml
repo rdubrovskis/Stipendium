@@ -1,6 +1,6 @@
 ﻿@model Stipendium.Models.RegisterPrivateViewModel
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Registrera";
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -8,7 +8,7 @@
 @using (Html.BeginForm("RegisterPrivate", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
+    <h4>Skapa en nytt kontot</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
@@ -16,7 +16,7 @@
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
             <span class="form-text text-muted">
-                Make sure the e-mail is valid
+                Se till att e-postadressen är giltig
             </span>
         </div>
     </div>
@@ -25,7 +25,7 @@
         <div class="col-md-10">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
             <span class="form-text text-muted">
-                The password must contain at least one number
+                Lösenordet måste ha minst en siffer och en stor bokstav
             </span>
         </div>
     </div>

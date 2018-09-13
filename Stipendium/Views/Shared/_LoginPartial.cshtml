@@ -14,11 +14,55 @@
         overflow: hidden;
         border-top: 1px solid #e9ecef;
     }
+
+    #loginLittle {
+        display: none;
+        border-top: #101010 1px solid;
+    }
+
+    @@media only screen and (max-width: 767px) {
+    #loginBig{
+        display:none;
+    }
+    #loginLittle{
+        display:block;
+    }
+}
 </style>
-<ul class="nav navbar-nav" style="float:right">
+
+<div id="loginLittle">
+    <div class="dropdown-divider" style="opacity: 0.1; margin:auto;"></div>
+    <form action="/Account/LogOff" class="dropdown-item" id="logoutForm" method="post" style="padding:0px">
+        @Html.AntiForgeryToken()
+        <ul class="nav navbar-nav">
+            @if (!Request.IsAuthenticated)
+            {
+                <li>@Html.ActionLink("Logga In", "Login", "Account")</li>
+                <li>@Html.ActionLink("Registera", "Registration", "Home")</li>
+
+            }
+            else
+            {
+                <li> <a href="/Manage/Index"><span class="glyphicon glyphicon-pencil"></span> Kontoinställningar</a></li>
+                if (User.IsInRole("Admin"))
+                {
+                    <li><a class="dropdown-item" href="/Admin/Index"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+                    <li><a class="dropdown-item" href="/Stiftelses/UploadExcel"><span class="glyphicon glyphicon-open-file"></span> Upload</a></li>
+                    <li><a class="dropdown-item" href="/Admin/UserAccounts"><span class="glyphicon glyphicon-user"></span> Manage Users</a></li>
+                    <li><a class="dropdown-item" href="/Admin/EmailConfirmationTemplate"><span class="glyphicon glyphicon-send"></span> E-mail confirmation template</a></li>
+                }
+                <li>
+                    <a href="javascript:document.getElementById('logoutForm').submit()"><span class="glyphicon glyphicon-log-out"></span>Logga ut</a>
+                </li>
+            }
+        </ul>
+    </form>
+</div>
+
+<ul class="nav navbar-nav" style="float:right" id="loginBig">
     @if (Request.IsAuthenticated)
     {
-        <li class="nav-item" style="display:flex"><span style="padding: 15px; color:white;">Logged in as: @User.Identity.GetUserName()</span></li>
+        <li class="nav-item" style="display:flex"><span style="padding: 15px; color:white;">Välkommen: @User.Identity.GetUserName()</span></li>
     }
 
     <li class="nav-item dropdown">
@@ -35,14 +79,14 @@
             }
             @if (Request.IsAuthenticated)
             {
-                <a class="dropdown-item" href="/Manage/Index"><span class="glyphicon glyphicon-pencil"></span> Manage</a>
+                <a class="dropdown-item" href="/Manage/Index"><span class="glyphicon glyphicon-pencil"></span> Kontoinställningar</a>
                 <div class="dropdown-divider"></div>
                 using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "dropdown-item" }))
                 {
                     @Html.AntiForgeryToken()
                     <a href="javascript:document.getElementById('logoutForm').submit()">
                         <span class="glyphicon glyphicon-log-out"></span>
-                        Logout
+                        Logga ut
                     </a>
                 }
             }
@@ -54,15 +98,15 @@
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group" style="display:table-row">
-                        <label class="control-label" for="Email">Email</label>
+                        <label class="control-label" for="Email">E-post</label>
                         <div>
-                            <input class="form-control" data-val="true" data-val-email="Fältet Email är inte en giltig e-postadress." data-val-required="Fältet Email krävs." id="Email" name="Email" type="text" value="">
+                            <input class="form-control" data-val="true" data-val-email="Fältet E-post är inte en giltig e-postadress." data-val-required="Fältet Email krävs." id="Email" name="Email" type="text" value="">
                         </div>
                     </div>
                     <div class="form-group" style="display:table-row">
-                        <label class="control-label" for="Password">Password</label>
+                        <label class="control-label" for="Password">Lösenord</label>
                         <div>
-                            <input class="form-control" data-val="true" data-val-required="Fältet Password krävs." id="Password" name="Password" type="password">
+                            <input class="form-control" data-val="true" data-val-required="Fältet Lösenord krävs." id="Password" name="Password" type="password">
                         </div>
                     </div>
                     <div class="form-group" style="display:table-row">
@@ -70,25 +114,24 @@
                             <div class="checkbox">
                                 <input data-val="true" data-val-required="Fältet Remember me? krävs." id="RememberMe" name="RememberMe" type="checkbox" value="true" style="margin-left:0px">
                                 <input name="RememberMe" type="hidden" value="false">
-                                <label for="RememberMe">Remember me?</label>
+                                <label for="RememberMe">Kom ihåg mig?</label>
                             </div>
                         </div>
                     </div>
                     <div class="form-group" style="display:table-row">
                         <div>
-                            <input type="submit" value="Log in" class="btn btn-default" />
+                            <input type="submit" value="Logga in" class="btn btn-default" />
                         </div>
                     </div>
 
                     <br />
 
                     <p>
-                        @Html.ActionLink("Register as a new user", "Registration", "Home")
+                        @Html.ActionLink("Registera", "Registration", "Home")
                     </p>
-                    @* Enable this once you have account confirmation enabled for password reset functionality
                 <p>
                     @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                </p>*@
+                </p>
                 }
             }
         </div>

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Globalization;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using Stipendium.Models;
+using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
-using System.Xml.Linq;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Stipendium.Models;
 
 namespace Stipendium.Controllers
 {
@@ -25,7 +22,7 @@ namespace Stipendium.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -37,9 +34,9 @@ namespace Stipendium.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -80,7 +77,17 @@ namespace Stipendium.Controllers
             {
                 return View(model);
             }
-            
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user != null)
+            {
+                if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+                {
+                    string callbackUrl = await SendEmailConfirmationTokenAsync(user.Id, "Confirm your account-Resend");
+                    ViewBag.errorMessage = "Du måste bekräfta din e-post adress innan du kan logga in";
+                    return View("Error");
+                }
+            }
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -88,10 +95,10 @@ namespace Stipendium.Controllers
             {
                 case SignInStatus.Success:
                     model.LastActivityDate = DateTime.Now;
-                    var user = db.Users.Where(u => u.Email == model.Email).FirstOrDefault();
+                    user = db.Users.Where(u => u.Email == model.Email).FirstOrDefault();
                     user.LastActivityDate = DateTime.Now;
                     db.SaveChanges();
-                    if (user.Roles.Count()>0 && user.Roles.Single().RoleId == db.Roles.Single(r=>r.Name == "Admin").Id)
+                    if (user.Roles.Count() > 0 && user.Roles.Single().RoleId == db.Roles.Single(r => r.Name == "Admin").Id)
                     {
                         return RedirectToLocal("~/Admin/Index");
                     }
@@ -139,7 +146,7 @@ namespace Stipendium.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -202,7 +209,10 @@ namespace Stipendium.Controllers
                 if (result.Succeeded)
                 {
                     await SendConfirmationEmail(user);
-                    return RedirectToAction("Index", "Home");
+                    ViewBag.Message = "Kolla dit e-post (" + user.Email + ") och bekräfta ditt konto, du mäste bekräftas "
+                         + "innan du kan logga in.";
+
+                    return View("Info");
                 }
                 AddErrors(result);
             }
@@ -224,11 +234,11 @@ namespace Stipendium.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new CompanyUser { UserName = model.Email, Email = model.Email,LastActivityDate = DateTime.Now };
+                var user = new CompanyUser { UserName = model.Email, Email = model.Email, LastActivityDate = DateTime.Now };
                 user.Stiftelse = new Stiftelse
                 {
                     Adress = model.Stiftelse.Adress,
-                    Aktnr=model.Stiftelse.Aktnr,
+                    Aktnr = model.Stiftelse.Aktnr,
                     CoAdress = model.Stiftelse.CoAdress,
                     Förmögenhet = model.Stiftelse.Förmögenhet,
                     Kommun = model.Stiftelse.Kommun,
@@ -297,10 +307,10 @@ namespace Stipendium.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Klicka <a href=\"" + callbackUrl + "\">här</a> för att återställa ditt lösenord");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -514,14 +524,14 @@ namespace Stipendium.Controllers
 
         public async Task SendConfirmationEmail(ApplicationUser user)
         {
-            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
             string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
             XmlDocument doc = new XmlDocument();
             string strAppPath = AppDomain.CurrentDomain.BaseDirectory;
-            doc.Load(strAppPath +"\\ConfirmationEmail.xml");
-            
+            doc.Load(strAppPath + "\\ConfirmationEmail.xml");
+
 
             string msgSubject = doc.SelectSingleNode("/Email/Subject").InnerText;
             string msgBody = doc.SelectSingleNode("/Email/Body").InnerText;
@@ -529,8 +539,19 @@ namespace Stipendium.Controllers
             var callbackUrl = Url.Action("ConfirmEmail", "Account",
                new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
             await UserManager.SendEmailAsync(user.Id,
-               msgSubject, msgBody + "<br />" + "Click <a href=\""
-               + callbackUrl + "\">here</a> to confirm your e-mail address");
+               msgSubject, msgBody + "<br />" + "Klicka <a href=\""
+               + callbackUrl + "\">här</a> för att bekräfta ditt e-post");
+        }
+
+        private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
+        {
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account",
+               new { userId = userID, code = code }, protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(userID, subject,
+               "Klicka <a href=\"" + callbackUrl + "\">här</a> för att bekräfta ditt e-post");
+
+            return callbackUrl;
         }
 
         #region Helpers
@@ -549,8 +570,37 @@ namespace Stipendium.Controllers
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error);
+                switch (error)
+                {
+                    case ("Passwords must have at least one digit ('0'-'9')."):
+                        ModelState.AddModelError("", "Lösenord måste ha minst en siffra ('0' - '9').");
+                        break;
+                    case ("Passwords must have at least one uppercase ('A'-'Z')."):
+                        ModelState.AddModelError("", "Lösenord måste ha minst en stor bokstav ('A'-'Z').");
+                        break;
+                    case ("Passwords must have at least one digit ('0'-'9'). Passwords must have at least one uppercase ('A'-'Z')."):
+                        ModelState.AddModelError("", "Lösenord måste ha minst en siffra ('0'-'9'). Lösenord måste ha minst en stor bokstav ('A'-'Z').");
+                        break;
+                    default:
+                        ModelState.AddModelError("", error);
+                        break;
+                }
+
             }
+        }
+
+        public ActionResult Resend(string userid)
+        {
+            if (userid != "")
+            {
+                string code = UserManager.GenerateEmailConfirmationToken(userid);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account",
+                    new { userId = userid, code = code }, protocol: Request.Url.Scheme);
+                UserManager.SendEmail(userid, "E-mail confirmation",
+               "Klicka <a href=\"" + callbackUrl + "\">här</a> för att bekräfta ditt e-post");
+                return new JsonResult { Data = "success", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            return View("Error");
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

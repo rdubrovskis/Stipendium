@@ -56,7 +56,7 @@ namespace Stipendium.Controllers
 
         //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public async Task<ActionResult> Index(ManageMessageId? message, string id)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
@@ -66,7 +66,10 @@ namespace Stipendium.Controllers
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
-
+            if (id != ""&&User.IsInRole("Admin"))
+            {
+                
+            }
             var userId = User.Identity.GetUserId();
             var model = new IndexViewModel
             {

@@ -2,6 +2,9 @@
     padding-top: 50px;
     padding-bottom: 20px;
 }
+#loginLittle{
+    display:none;
+}
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
@@ -22,3 +25,5 @@ select,
 textarea {
     max-width: 280px;
 }
+
+
