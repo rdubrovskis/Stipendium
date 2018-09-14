@@ -333,6 +333,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Counties.cs" />
     <Compile Include="Models\CustomAuthorize.cs" />
     <Compile Include="Models\IdentityModels.cs" />
