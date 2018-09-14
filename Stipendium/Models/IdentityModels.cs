@@ -16,6 +16,10 @@ namespace Stipendium.Models
         [Display(Name = "Registered since")]
         public DateTime RegistrationDate { get { return DateTime.Now; } }
         public DateTimeOffset LastActivityDate { get; set; }
+        [Display(Name ="Förnamn")]
+        public string FirstName { get; set; }
+        [Display(Name = "Efternamn")]
+        public string LastName { get; set; }
 
 
 
@@ -30,10 +34,7 @@ namespace Stipendium.Models
 
     public class PrivateUser : ApplicationUser
     {
-        [Display(Name ="Förnamn")]
-        public string FirstName { get; set; }
-        [Display(Name = "Efternamn")]
-        public string LastName { get; set; }
+        
         public string Address { get; set; }
         [Display(Name ="Post Nr.")]
         public string PostNr { get; set; }
@@ -71,5 +72,7 @@ namespace Stipendium.Models
         public System.Data.Entity.DbSet<Stipendium.Models.Pageviews> Pageviews { get; set; }
 
         public System.Data.Entity.DbSet<Stipendium.Models.SearchTerm> SearchTerms { get; set; }
+
+        public System.Data.Entity.DbSet<Stipendium.Models.Comment> Comments { get; set; }
     }
 }

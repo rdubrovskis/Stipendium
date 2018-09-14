@@ -1,9 +1,11 @@
 ﻿@model Stipendium.Models.Stiftelse
+@using Microsoft.AspNet.Identity;
 @using System.Globalization;
 
 @{
     ViewBag.Title = Model.Stiftelsenamn;
 }
+<script src="~/Scripts/jquery-3.3.1.js"></script>
 <style>
     h5{
         font-size: 16px;
@@ -38,3 +40,27 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 }
+
+<hr />
+
+@{ Html.RenderAction("Create", "Comments", new { stiftID = Model.Id, userID = User.Identity.GetUserId() });}
+<div id="comments-list-container">
+    @{ Html.RenderAction("Index", "Comments", new { stiftID = Model.Id });}
+</div>
+<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+<script>
+    function PostComment(id) {
+        $.get("/Comments/PostComment?id=" + id + "&body=" + $("#Body").val(), function (Data) {
+
+            $("#comments-list-container").html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display:inline-block; margin: 50%;"></span>');
+
+            if (Data === "success") {
+                $("#Body").val("");
+                $("#comments-list-container").load("/Comments/Index?stiftID=@Model.Id");
+            }
+            else {
+                $("#comment.submit").append('<span style="color:red">Something went wrong</span>');
+            }
+        });
+    }
+</script>

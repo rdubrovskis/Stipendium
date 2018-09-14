@@ -12,5 +12,6 @@ namespace Stipendium.Models
         public virtual Stiftelse Stiftelse { get; set; }
         public string Body { get; set; }
         public DateTime CommentDate { get; set; }
+        public DateTime? EditDate { get; set; }
     }
 }

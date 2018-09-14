@@ -228,6 +228,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PageviewsController.cs" />
@@ -330,6 +331,14 @@
     <Compile Include="Migrations\201809131330470_StiftelsesRequired.cs" />
     <Compile Include="Migrations\201809131330470_StiftelsesRequired.Designer.cs">
       <DependentUpon>201809131330470_StiftelsesRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809140934246_Comments.cs" />
+    <Compile Include="Migrations\201809140934246_Comments.Designer.cs">
+      <DependentUpon>201809140934246_Comments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809141404343_Comments2.cs" />
+    <Compile Include="Migrations\201809141404343_Comments2.Designer.cs">
+      <DependentUpon>201809141404343_Comments2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -467,6 +476,11 @@
     <Content Include="Views\Admin\EmailConfirmationTemplate.cshtml" />
     <Content Include="Views\Admin\NewlyUpdated.cshtml" />
     <Content Include="Views\Shared\Info.cshtml" />
+    <Content Include="Views\Comments\Create.cshtml" />
+    <Content Include="Views\Comments\Delete.cshtml" />
+    <Content Include="Views\Comments\Edit.cshtml" />
+    <Content Include="Views\Comments\Index.cshtml" />
+    <Content Include="Views\Comments\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -547,6 +561,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809131330470_StiftelsesRequired.resx">
       <DependentUpon>201809131330470_StiftelsesRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809140934246_Comments.resx">
+      <DependentUpon>201809140934246_Comments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809141404343_Comments2.resx">
+      <DependentUpon>201809141404343_Comments2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

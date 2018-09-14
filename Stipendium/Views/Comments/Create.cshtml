@@ -1,0 +1,44 @@
+﻿@model Stipendium.Models.Comment
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(m=>m.CommentDate)
+    @Html.Hidden("stiftID",Model.Stiftelse.Id)
+
+    @*<div class="form-horizontal">
+        <h4>Comment</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Body, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>*@
+
+<div class="submitContainer">
+    <div class="commenter-box">
+        <span class="glyphicon glyphicon-user"></span>
+        <span>@ViewBag.CurrentUser</span>
+    </div>
+    <div class="comment-body">
+        @Html.TextAreaFor(model => model.Body, new { @class = "form-control", rows = 2, placeholder = "Har du erfarenhet med denna stiftelset? Gärna lämna in en publik kommentar här.", style = "max-width: 500px;" })
+    </div>
+    <input id ="comment-submit" type="button" value="Skicka" class="btn btn-default" onclick="PostComment(@Model.Stiftelse.Id)" />
+</div>
+}

@@ -1,0 +1,31 @@
+﻿@model Stipendium.Models.Comment
+
+
+<div class="commentContainer">
+    <div class="commenter-box">
+        <div class="commentlist-body">
+            @Html.DisplayFor(model => model.Body, new { @class = "form-control", style = "max-width: 500px; min-height:54px;" })
+        </div>
+        <span class="glyphicon glyphicon-user"></span>
+
+        @if (Model.Commenter.Roles.FirstOrDefault(r => r.RoleId == "86314fda-28ff-47e5-a342-2fd126e01744") != null)
+        {
+            <span>@Model.Commenter.FirstName @Model.Commenter.LastName</span>
+            <span class="label label-warning">Admin</span>
+        }
+        else
+        {
+            <span>@Model.Commenter.FirstName @Model.Commenter.LastName.First()</span>
+        }
+        <br />
+        @if (Model.EditDate == null)
+        {
+            <span class="comment-date text-muted">@Model.CommentDate</span>
+        }
+        else
+        {
+            <span class="comment-date text-muted">Edited on: @Model.EditDate</span>
+        }
+
+    </div>
+</div>
