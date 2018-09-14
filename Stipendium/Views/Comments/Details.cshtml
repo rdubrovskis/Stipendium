@@ -26,6 +26,10 @@
         {
             <span class="comment-date text-muted">Edited on: @Model.EditDate</span>
         }
+        @if(User.IsInRole("Admin"))
+        {
+            @Html.ActionLink("Delete", "Delete", new {controller="Comments", id = Model.Id })
+        }
 
     </div>
 </div>

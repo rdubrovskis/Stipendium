@@ -194,7 +194,7 @@ namespace Stipendium.Controllers
         [AllowAnonymous]
         public ActionResult RegisterPrivate()
         {
-            return PartialView();
+            return View();
         }
 
         [HttpPost]

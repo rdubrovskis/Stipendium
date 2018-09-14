@@ -135,9 +135,10 @@ namespace Stipendium.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Comment comment = db.Comments.Find(id);
+            int stiftId = comment.Stiftelse.Id;
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details","Stiftelses",new { id = stiftId });
         }
 
         protected override void Dispose(bool disposing)
