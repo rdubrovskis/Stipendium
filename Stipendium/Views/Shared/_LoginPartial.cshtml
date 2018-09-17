@@ -74,7 +74,6 @@
                 <a class="dropdown-item" href="/Admin/Index"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
                 <a class="dropdown-item" href="/Stiftelses/UploadExcel"><span class="glyphicon glyphicon-open-file"></span> Upload</a>
                 <a class="dropdown-item" href="/Admin/UserAccounts"><span class="glyphicon glyphicon-user"></span> Manage Users</a>
-                <a class="dropdown-item" href="/Admin/EmailConfirmationTemplate"><span class="glyphicon glyphicon-send"></span> E-mail confirmation template</a>
 
             }
             @if (Request.IsAuthenticated)
@@ -114,7 +113,7 @@
                             <div class="checkbox">
                                 <input data-val="true" data-val-required="Fältet Remember me? krävs." id="RememberMe" name="RememberMe" type="checkbox" value="true" style="margin-left:0px">
                                 <input name="RememberMe" type="hidden" value="false">
-                                <label for="RememberMe">Kom ihåg mig?</label>
+                                <label for="RememberMe">Kom ihåg mig</label>
                             </div>
                         </div>
                     </div>
@@ -127,10 +126,10 @@
                     <br />
 
                     <p>
-                        @Html.ActionLink("Registera", "Registration", "Home")
+                        @Html.ActionLink("Registera", "RegisterPrivate", "Account")
                     </p>
                 <p>
-                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                    @Html.ActionLink("Forgot your password?", "ForgotPassword", "Account")
                 </p>
                 }
             }

@@ -18,7 +18,7 @@
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
-                <h4>Logga in till dig kontot på Stiftelseverket.</h4>
+                <h4>Logga in på ditt kontot på Stiftelseverket.</h4>
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <p>
-                    @Html.ActionLink("Registrera som nya användare", "Register")
+                    @Html.ActionLink("Registrera ny användare", "RegisterPrivate")
                 </p>
                     <p>
                         @Html.ActionLink("Glömt ditt lösenord?", "ForgotPassword")

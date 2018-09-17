@@ -1,9 +1,16 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using ExcelDataReader;
+using LinqToExcel;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using Stipendium.Models;
 using System;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -533,14 +540,14 @@ namespace Stipendium.Controllers
             doc.Load(strAppPath + "\\ConfirmationEmail.xml");
 
 
-            string msgSubject = doc.SelectSingleNode("/Email/Subject").InnerText;
+            string msgSubject = "Välkommen hos Stiftelseverket!";
             string msgBody = doc.SelectSingleNode("/Email/Body").InnerText;
 
             var callbackUrl = Url.Action("ConfirmEmail", "Account",
                new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
             await UserManager.SendEmailAsync(user.Id,
-               msgSubject, msgBody + "<br />" + "Klicka <a href=\""
-               + callbackUrl + "\">här</a> för att bekräfta ditt e-post");
+               msgSubject, "<p>Kul att du valt att medlem hos Stiftelseverket.</p>" + "<br />" + "<a href=\""
+               + callbackUrl + "\">Klicka här för att bekräfta din emailadress som du angivit i registering</a><br/><p>Lycka till med ditt sökande.</p><p>Stiftelseverket</p>");
         }
 
         private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
@@ -640,6 +647,117 @@ namespace Stipendium.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
+
+        [AllowAnonymous]
+        public ActionResult StiftelseApplication()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> StiftelseApplicationAsync(StiftelseApplicationForm model, string other)
+        {
+            if (ModelState.IsValid)
+            {
+                string body = "<h3>New stiftelse application from: "+model.FirstName +" " +model.LastName+" (<a href=\"mailto: " + model.Email + "\">"+model.Email+"</a>)</h3>" +
+                    "<p>Alternate contact: " + other +"</p>"+
+                    "<br />"+
+                    "<p>Stifteslsenr: " + model.Stiftelsenr + "</p>" +
+                    "<p>Aktnr: " + model.Aktnr+ "</p>" +
+                    "<p>Org. nr: " + model.Orgnr + "</p>" +
+                    "<p>Län: " + model.Län + "</p>" +
+                    "<p>Stiftelsenamn: " + model.Stiftelsenamn + "</p>" +
+                    "<p>Kommun: " + model.Kommun + "</p>" +
+                    "<p>Adress: " + model.Adress + "</p>" +
+                    "<p>C/o adress: " + model.CoAdress + "</p>" +
+                    "<p>Postnummer: " + model.Postnr + "</p>" +
+                    "<p>Postadress: " + model.Postadress + "</p>" +
+                    "<p>Telefon: " + model.Telefon + "</p>" +
+                    "<p>Stifteslsetyp: " + model.Stiftelsetyp + "</p>" +
+                    "<p>År: " + model.År + "</p>" +
+                    "<p>Förmögenhet: " + model.Förmögenhet + "</p>" +
+                    "<p>Ändamål: " + model.Ändamål + "</p>";
+
+                var administrators = db.Users.Where(u => u.Roles.FirstOrDefault().RoleId == db.Roles.FirstOrDefault(s => s.Name == "Admin").Id);
+                //var attachmentsource = GenerateApplication(model);
+
+                foreach (var admin in administrators)
+                {
+                    var from = new EmailAddress("applications@stiftelseverket.se");
+                    var to = new EmailAddress(admin.Email);
+  
+                
+                    var msg = MailHelper.CreateSingleEmail(from, to, "Ny stiftelseapplikation", body, body);
+
+                    //byte[] bytes = System.IO.File.ReadAllBytes(attachmentsource);
+                    //string file = Convert.ToBase64String(bytes);
+                    //var attachment = new SendGrid.Helpers.Mail.Attachment { Filename = "applikation.xls", Content = file, Type = "application/vnd.ms-excel" };
+                    //msg.AddAttachment("applikation.xls",file);
+
+                    await UserManager.SendEmailAsync(admin.Id, "Ny Stiftelseapplikation", body);
+
+                }
+                //System.IO.File.Delete(attachmentsource);
+
+                ViewBag.Title = "Tack för din ansökan";
+                ViewBag.Message = "Vår administration ska kontakta dig så snart som möjligt för att verifiera din information.";
+                    return View("Info");
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        //private string GenerateApplication(StiftelseApplicationForm form)
+        //{
+        //    var folder = Server.MapPath("~\\App_Data\\");
+        //    var oldPath =folder+"EntryTemplate.xls";
+        //    var newPath = folder + form.FirstName + "_"+form.LastName + "_" +DateTime.Now.ToShortDateString() + ".xls";
+        //    System.IO.File.Copy(oldPath, newPath);
+
+        //    var fileInfo = new FileInfo(newPath);
+        //    var excelFile = new ExcelQueryFactory(newPath);
+        //    using (var stream = System.IO.File.Open(newPath, FileMode.Open, FileAccess.ReadWrite))
+        //    {
+        //        using (var reader = ExcelReaderFactory.CreateReader(stream))
+        //        {
+        //            var result = reader.AsDataSet(new ExcelDataSetConfiguration() { ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration() { UseHeaderRow = true } });
+
+        //            var table = result.Tables[0];
+        //            var newRow = table.Rows[1];
+
+        //            newRow["Aktnr"] = form.Aktnr;
+        //            newRow["Org.nr"] = form.Orgnr;
+        //            newRow["Stiftelsenr"] = form.Stiftelsenr;
+        //            newRow["Län"] = form.Län;
+        //            newRow["Stiftelsenamn"] = form.Stiftelsenamn;
+        //            newRow["Kommun"] = form.Kommun;
+        //            newRow["Adress"] = form.Adress;
+        //            newRow["C/o adress"] = form.CoAdress;
+        //            newRow["Postnr"] = form.Postnr;
+        //            newRow["Postadress"] = form.Postadress;
+        //            newRow["Telefon"] = form.Telefon;
+        //            newRow["Stiftelsetyp"] = form.Stiftelsetyp;
+        //            newRow["År"] = form.År;
+        //            newRow["Förmögenhet"] = form.Förmögenhet;
+        //            newRow["Ändamål"] = form.Ändamål;
+
+        //            table.Rows[1].BeginEdit();
+        //            table.Rows[1]
+
+        //            table.AcceptChanges();
+        //            result.Tables[0].AcceptChanges();
+        //            result.AcceptChanges();
+
+        //        }
+        //        stream.Dispose();
+        //        stream.Close();
+        //    }
+
+        //    return newPath;
+        //}
         #endregion
     }
 }
