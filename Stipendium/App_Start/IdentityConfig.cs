@@ -30,8 +30,8 @@ namespace Stipendium
         }
         private async Task configSendGridasync(IdentityMessage message)
         {
-            //var apiKey = ConfigurationManager.AppSettings["SendGridAPIKey"];
-            var apiKey = "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";
+            var apiKey = ConfigurationManager.AppSettings["SendGridAPIKey"];
+
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("noreply@stiftelseverket.se", "No Reply");
             var subject = message.Subject;
