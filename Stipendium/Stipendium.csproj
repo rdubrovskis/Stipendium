@@ -415,7 +415,6 @@
     <Content Include="angular-editor-master\fonts\fontawesome-webfont.woff" />
     <Content Include="angular-editor-master\LICENSE" />
     <Content Include="angular-editor-master\README.md" />
-    <Content Include="App_Data\EntryTemplate.xls" />
     <None Include="Properties\PublishProfiles\Stipendium - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\StipendiumSearch - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
@@ -490,6 +489,7 @@
     <Content Include="Views\Account\StiftelseApplication.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Doc\" />
     <Folder Include="Views\Pageviews\" />
     <Folder Include="Views\SearchTerms\" />
