@@ -96,7 +96,7 @@ namespace Stipendium.Models
         [Required]
         [Display(Name = "Efternamn")]
         public string LastName { get; set; }
-
+        [Display(Name = "Adress")]
         public string Address { get; set; }
 
         [Display(Name = "Postnummer")]

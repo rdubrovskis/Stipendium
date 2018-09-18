@@ -21,11 +21,11 @@ namespace Stipendium.Models
         public string Other { get; set; }
 
 
-        [Display(Name = "Organisations nummer")]
+        [Display(Name = "Organisationsnummer")]
         public string Orgnr { get; set; }
         public string Län { get; set; }
         [Required]
-        [Display(Name = "Stiftelsensnamn")]
+        [Display(Name = "Stiftelsens namn")]
         public string Stiftelsenamn { get; set; }
         public string Kommun { get; set; }
         public string Adress { get; set; }

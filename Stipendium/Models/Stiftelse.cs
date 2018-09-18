@@ -16,7 +16,7 @@ namespace Stipendium.Models
         [Required]
         [Display(Name = "Aktnummer")]
         public string Aktnr { get; set; }
-        [Display(Name = "Organisations nummer")]
+        [Display(Name = "Organisationsnummer")]
         public string Orgnr { get; set; }
         public string Län { get; set; }
         [Required]

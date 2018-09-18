@@ -539,7 +539,7 @@ namespace Stipendium.Controllers
             doc.Load(strAppPath + "\\ConfirmationEmail.xml");
 
 
-            string msgSubject = "Välkommen hos Stiftelseverket!";
+            string msgSubject = "Välkommen till Stiftelseverket!";
             string msgBody = doc.SelectSingleNode("/Email/Body").InnerText;
 
             var callbackUrl = Url.Action("ConfirmEmail", "Account",
