@@ -140,3 +140,10 @@ btn btn-defaut{
 .pagination > li > a, .pagination > li > span {
     color:green;
 }
+
+@media only screen and (max-width: 840px){
+
+    #searchpanel{
+        flex-direction:column;
+    }
+}

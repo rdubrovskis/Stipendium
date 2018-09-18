@@ -487,6 +487,7 @@
     <Content Include="Views\Comments\Index.cshtml" />
     <Content Include="Views\Comments\Details.cshtml" />
     <Content Include="Views\Account\StiftelseApplication.cshtml" />
+    <Content Include="Views\Home\JoinToday.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

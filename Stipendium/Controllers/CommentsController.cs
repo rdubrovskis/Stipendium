@@ -34,6 +34,7 @@ namespace Stipendium.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.AdminRole = db.Roles.FirstOrDefault(r => r.Name == "Admin").Id;
             return PartialView(comment);
         }
 

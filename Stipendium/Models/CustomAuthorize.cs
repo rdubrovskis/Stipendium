@@ -16,7 +16,7 @@ namespace Stipendium.Models
             }
             else
             {
-                filterContext.Result = new RedirectResult("~/Home/Join");
+                filterContext.Result = new RedirectResult("~/Home/JoinToday");
             }
         }
     }
