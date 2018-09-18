@@ -33,13 +33,19 @@
 
 
 </div>
-@if(User.IsInRole("Admin"))
-{
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    <a href="#" data-toggle="modal" data-target="#contactModal">Se någonting fel?</a><span> | </span>
+    @if (User.IsInRole("Admin"))
+        {
+
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) <span> | </span>
+                                                                
+        }
+
+            @Html.ActionLink("Backa till Listan", "Index")
 </p>
-}
+
 
 <hr />
 
@@ -47,7 +53,31 @@
 <div id="comments-list-container">
     @{ Html.RenderAction("Index", "Comments", new { stiftID = Model.Id });}
 </div>
-<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+<div style="padding:17px!important" class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="contactModalLabel" style="display:inline-block">Har du mer information?</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Vi strävar alltid efter att hålla vår information på stiftelserna korrekta och aktuella. Om du är en del av ledningen för denna
+                    stiftelsen och önskar att korrigera eller tillägga informationen på denna sidan, vänligen maila oss på:
+                </p>
+                <p>
+                    <a href="mailto:admin@stiftelseverket.se">admin@@stiftelseverket.se</a>
+                </p>
+            </div>
+            <div class="modal-footer" style="border-top:none">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function PostComment(id) {
         $.get("/Comments/PostComment?id=" + id + "&body=" + $("#Body").val(), function (Data) {
