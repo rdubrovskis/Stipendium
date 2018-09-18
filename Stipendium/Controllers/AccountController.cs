@@ -216,8 +216,7 @@ namespace Stipendium.Controllers
                 if (result.Succeeded)
                 {
                     await SendConfirmationEmail(user);
-                    ViewBag.Message = "Kolla dit e-post (" + user.Email + ") och bekräfta ditt konto, du mäste bekräftas "
-                         + "innan du kan logga in.";
+                    ViewBag.Message = "Kontrollera din e-post (" + user.Email + ") och bekräfta ditt registrerade konto.";
 
                     return View("Info");
                 }
@@ -285,7 +284,7 @@ namespace Stipendium.Controllers
                 return View("Error");
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            return View(result.Succeeded ? "E-post bekräftad" : "Error");
         }
 
         //
@@ -316,7 +315,7 @@ namespace Stipendium.Controllers
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Klicka <a href=\"" + callbackUrl + "\">här</a> för att återställa ditt lösenord");
+                await UserManager.SendEmailAsync(user.Id, "Återställ lösenord", "Klicka <a href=\"" + callbackUrl + "\">här</a> för att återställa ditt lösenord");
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
@@ -546,8 +545,8 @@ namespace Stipendium.Controllers
             var callbackUrl = Url.Action("ConfirmEmail", "Account",
                new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
             await UserManager.SendEmailAsync(user.Id,
-               msgSubject, "<p>Kul att du valt att medlem hos Stiftelseverket.</p>" + "<br />" + "<a href=\""
-               + callbackUrl + "\">Klicka här för att bekräfta din emailadress som du angivit i registering</a><br/><p>Lycka till med ditt sökande.</p><p>Stiftelseverket</p>");
+               msgSubject, "<p>Välkommen som ny medlem hos Stiftelseverket.</p>" + "<br />" + "<a href=\""
+               + callbackUrl + "\">Klicka här för att bekräfta din e-postadress som du angav vid registering</a><br/><p>Lycka till med ditt sökande.</p><p>Stiftelseverket</p>");
         }
 
         private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
@@ -664,8 +663,6 @@ namespace Stipendium.Controllers
                 string body = "<h3>New stiftelse application from: "+model.FirstName +" " +model.LastName+" (<a href=\"mailto: " + model.Email + "\">"+model.Email+"</a>)</h3>" +
                     "<p>Alternate contact: " + other +"</p>"+
                     "<br />"+
-                    "<p>Stifteslsenr: " + model.Stiftelsenr + "</p>" +
-                    "<p>Aktnr: " + model.Aktnr+ "</p>" +
                     "<p>Org. nr: " + model.Orgnr + "</p>" +
                     "<p>Län: " + model.Län + "</p>" +
                     "<p>Stiftelsenamn: " + model.Stiftelsenamn + "</p>" +
@@ -702,7 +699,7 @@ namespace Stipendium.Controllers
                 //System.IO.File.Delete(attachmentsource);
 
                 ViewBag.Title = "Tack för din ansökan";
-                ViewBag.Message = "Vår administration ska kontakta dig så snart som möjligt för att verifiera din information.";
+                ViewBag.Message = "Vår administration kommer att kontakta dig så snart som möjligt för att verifiera din lämnade information.";
                     return View("Info");
             }
 

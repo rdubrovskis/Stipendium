@@ -1,5 +1,5 @@
 ﻿@model Stipendium.Models.StiftelseApplicationForm
-    @using Stipendium.Models;
+@using Stipendium.Models;
 @{
     ViewBag.Title = "Registrera";
     var selectList = new SelectList(new Counties().List);
@@ -10,7 +10,7 @@
 @using (Html.BeginForm("StiftelseApplicationAsync", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Skicka Registersapplikation</h4>
+    <h4>Ansöka om att finnas med på Stiftelseverket.se</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <fieldset>
@@ -34,14 +34,11 @@
             @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                <span class="form-text text-muted">
-                    E-postadress med som vi kan kontakta dig
-                </span>
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(m => m.Other, new { @class="col-md-2 control-label"})
+            @Html.LabelFor(m => m.Other, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
                 @Html.TextAreaFor(m => m.Other, new { rows = 2, @class = "form-control" })
                 <span class="form-text text-muted">
@@ -55,21 +52,6 @@
 
     <fieldset>
         <legend>Stiftelse information</legend>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Stiftelsenr, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Stiftelsenr, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Stiftelsenr, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Aktnr, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Aktnr, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Aktnr, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Orgnr, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -139,9 +121,6 @@
             @Html.LabelFor(model => model.Telefon, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "form-control" } })
-                <span class="form-text text-muted">
-                   Publisk kontakttelefon som kommer att visas på din stiftelsens sidan.
-                </span>
                 @Html.ValidationMessageFor(model => model.Telefon, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -178,7 +157,8 @@
             <div class="col-md-10">
                 @Html.TextAreaFor(model => model.Ändamål, new { @class = "form-control", rows = 5 })
                 <span class="form-text text-muted">
-                    Kort beskrivning av din stiftelse som kommer at visas på din stiftelses sidan
+                    Kort beskrivning av stiftelsens ändamåls
+                    paragraf.
                 </span>
                 @Html.ValidationMessageFor(model => model.Ändamål, "", new { @class = "text-danger" })
             </div>

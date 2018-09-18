@@ -127,12 +127,6 @@
         <th>
             Förmögenhet (SEK)
         </th>
-        @if(User.IsInRole("Admin"))
-        {
-        <th>
-            Last Modified
-        </th> 
-        }
 
     </tr>
 
@@ -148,10 +142,6 @@
             <td>
                 @double.Parse(item.Förmögenhet).ToString("C0",new CultureInfo("sv-SE"))
             </td>
-            @if(User.IsInRole("Admin"))
-            {
-            <td>@Html.DisplayFor(modelItem => item.LastModified) @if (item.DateCreated != null && item.LastModified >= DateTime.Now.AddDays(-7)){<span class="label label-success">Updated!</span>}</td>
-            }
             
             @*<td >
                     @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |

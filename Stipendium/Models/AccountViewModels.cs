@@ -59,7 +59,7 @@ namespace Stipendium.Models
         [Display(Name = "Lösenord")]
         public string Password { get; set; }
 
-        [Display(Name = "Kom ihåg mig?")]
+        [Display(Name = "Kom ihåg mig")]
         public bool RememberMe { get; set; }
 
         public DateTimeOffset LastActivityDate { get; set; }
@@ -73,7 +73,7 @@ namespace Stipendium.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "Lösenordet måst ha minst {2} tecken.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Lösenord måste ha minst {2} tecken.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Lösenord")]
         public string Password { get; set; }
@@ -99,7 +99,7 @@ namespace Stipendium.Models
 
         public string Address { get; set; }
 
-        [Display(Name = "Post Nr.")]
+        [Display(Name = "Postnummer")]
         public string PostNr { get; set; }
 
         [Display(Name = "Ort")]
@@ -123,13 +123,13 @@ namespace Stipendium.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "Lösenordet måste ha minst {2} tecken.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Lösenord måste ha minst {2} tecken.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Lösenord")]
+        [Display(Name = "Nytt lösenord")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Bekräfta lösenordet")]
+        [Display(Name = "Upprepa nytt lösenord")]
         [Compare("Password", ErrorMessage = "Lösenorden matchar inte.")]
         public string ConfirmPassword { get; set; }
 
@@ -140,7 +140,7 @@ namespace Stipendium.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "E-post")]
         public string Email { get; set; }
     }
 }

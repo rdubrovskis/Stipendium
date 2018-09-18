@@ -15,9 +15,6 @@
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            <span class="form-text text-muted">
-                Se till att e-postadressen är giltig
-            </span>
         </div>
     </div>
     <div class="form-group">
@@ -25,7 +22,7 @@
         <div class="col-md-10">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
             <span class="form-text text-muted">
-                Lösenordet måste ha minst en siffer och båda en stor och en liten   bokstav
+                Lösenord måste ha minst en siffer och båda en stor och en liten   bokstav
             </span>
         </div>
     </div>
