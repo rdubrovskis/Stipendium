@@ -2,15 +2,18 @@
     padding-top: 50px;
     padding-bottom: 20px;
 }
-#loginLittle{
-    display:none;
+
+#loginLittle {
+    display: none;
 }
-a{
-    color:green;
+
+a {
+    color: green;
 }
-a:hover{
-    color:darkgreen;
-}
+
+    a:hover {
+        color: darkgreen;
+    }
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -21,16 +24,19 @@ a:hover{
     background-color: forestgreen;
     border-color: forestgreen;
 }
+
     .navbar-inverse .navbar-brand {
         color: white;
     }
 
-.navbar-inverse .navbar-toggle {
-    border-color: forestgreen;
-}
+    .navbar-inverse .navbar-toggle {
+        border-color: forestgreen;
+    }
+
 .navbar-toggle:hover {
     background-color: forestgreen;
 }
+
 .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
     background-color: darkgreen;
 }
@@ -42,9 +48,11 @@ a:hover{
 .dropdown-divider {
     border-top: 1px solid lawngreen;
 }
+
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
     border-color: darkgreen;
 }
+
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
     color: #fff;
     background-color: darkgreen;
@@ -93,25 +101,29 @@ textarea {
     }
 }
 
-.commentContainer{
-    max-width:500px;
+.commentContainer {
+    max-width: 500px;
 }
-.commenter-box{
-    margin-bottom:2px;
+
+.commenter-box {
+    margin-bottom: 2px;
 }
-.comment-body{
-    margin-bottom:6px;
+
+.comment-body {
+    margin-bottom: 6px;
 }
+
 .commentlist-body {
     min-height: 54px;
     padding: 6px 12px;
     background-color: aliceblue;
     border: 1px solid gainsboro;
     position: relative;
-    margin-bottom:14px;
+    margin-bottom: 14px;
 }
-.comment-date{
-    font-size:smaller;
+
+.comment-date {
+    font-size: smaller;
 }
 
 .commentlist-body:before {
@@ -123,27 +135,36 @@ textarea {
     border-right: 6px solid transparent;
     border-top: 6px solid gainsboro;
     border-bottom: 6px solid transparent;
-
     left: 20px;
     bottom: -13px;
 }
 
 .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
-
     background-color: forestgreen;
     border-color: forestgreen;
 }
 
-btn btn-defaut{
+btn btn-defaut {
     forest-green;
 }
+
 .pagination > li > a, .pagination > li > span {
-    color:green;
+    color: green;
 }
 
-@media only screen and (max-width: 840px){
+@media only screen and (max-width: 840px) {
 
-    #searchpanel{
-        flex-direction:column;
+    #searchpanel {
+        flex-direction: column;
+    }
+
+    #stiftelsetable > tbody>tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        border: solid gainsboro;
+    }
+    #title-row{
+        display:none!important;
     }
 }
