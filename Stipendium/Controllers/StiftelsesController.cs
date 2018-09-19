@@ -222,7 +222,7 @@ namespace Stipendium.Controllers
                                         {
                                             Stiftelsenr = stiftNr,
                                             Aktnr = row["Aktnr"].ToString(),
-                                            Orgnr = row["Org#nr"].ToString(),
+                                            Orgnr = row["Org.nr"].ToString(),
                                             Län = row["Län"].ToString(),
                                             Stiftelsenamn = row["Stiftelsenamn"].ToString(),
                                             Kommun = row["Kommun"].ToString(),

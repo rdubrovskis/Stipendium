@@ -1,5 +1,4 @@
-﻿using ExcelDataReader;
-using LinqToExcel;
+﻿using ClosedXML.Excel;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -7,10 +6,9 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using Stipendium.Models;
 using System;
+using System.Configuration;
 using System.Data;
-using System.IO;
 using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -660,9 +658,9 @@ namespace Stipendium.Controllers
         {
             if (ModelState.IsValid)
             {
-                string body = "<h3>New stiftelse application from: "+model.FirstName +" " +model.LastName+" (<a href=\"mailto: " + model.Email + "\">"+model.Email+"</a>)</h3>" +
-                    "<p>Alternate contact: " + other +"</p>"+
-                    "<br />"+
+                string body = "<h3>New stiftelse application from: " + model.FirstName + " " + model.LastName + " (<a href=\"mailto: " + model.Email + "\">" + model.Email + "</a>)</h3>" +
+                    "<p>Alternate contact: " + other + "</p>" +
+                    "<br />" +
                     "<p>Org. nr: " + model.Orgnr + "</p>" +
                     "<p>Län: " + model.Län + "</p>" +
                     "<p>Stiftelsenamn: " + model.Stiftelsenamn + "</p>" +
@@ -678,83 +676,106 @@ namespace Stipendium.Controllers
                     "<p>Ändamål: " + model.Ändamål + "</p>";
 
                 var administrators = db.Users.Where(u => u.Roles.FirstOrDefault().RoleId == db.Roles.FirstOrDefault(s => s.Name == "Admin").Id);
-                //var attachmentsource = GenerateApplication(model);
+                var attachmentsource = GenerateApplication(model);
 
                 foreach (var admin in administrators)
                 {
                     var from = new EmailAddress("applications@stiftelseverket.se");
                     var to = new EmailAddress(admin.Email);
-  
-                
+
+
                     var msg = MailHelper.CreateSingleEmail(from, to, "Ny stiftelseapplikation", body, body);
 
-                    //byte[] bytes = System.IO.File.ReadAllBytes(attachmentsource);
-                    //string file = Convert.ToBase64String(bytes);
-                    //var attachment = new SendGrid.Helpers.Mail.Attachment { Filename = "applikation.xls", Content = file, Type = "application/vnd.ms-excel" };
-                    //msg.AddAttachment("applikation.xls",file);
+                    byte[] bytes = System.IO.File.ReadAllBytes(attachmentsource);
+                    string file = Convert.ToBase64String(bytes);
+                    var attachment = new SendGrid.Helpers.Mail.Attachment { Filename = model.FirstName+"_"+model.LastName+"_"+DateTime.Now.ToShortDateString()+".xlsx", Content = file, Type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" };
+                    msg.AddAttachment("applikation.xls", file);
 
-                    await UserManager.SendEmailAsync(admin.Id, "Ny Stiftelseapplikation", body);
+                    var client = new SendGridClient(ConfigurationManager.AppSettings["SendGridAPIKey"]);
+                    await client.SendEmailAsync(msg);
+
+                    //await UserManager.SendEmailAsync(admin.Id, "Ny Stiftelseapplikation", body);
 
                 }
-                //System.IO.File.Delete(attachmentsource);
+                System.IO.File.Delete(attachmentsource);
 
                 ViewBag.Title = "Tack för din ansökan";
                 ViewBag.Message = "Vår administration kommer att kontakta dig så snart som möjligt för att verifiera din lämnade information.";
-                    return View("Info");
+                return View("Info");
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        //private string GenerateApplication(StiftelseApplicationForm form)
-        //{
-        //    var folder = Server.MapPath("~\\App_Data\\");
-        //    var oldPath =folder+"EntryTemplate.xls";
-        //    var newPath = folder + form.FirstName + "_"+form.LastName + "_" +DateTime.Now.ToShortDateString() + ".xls";
-        //    System.IO.File.Copy(oldPath, newPath);
+        private string GenerateApplication(StiftelseApplicationForm form)
+        {
+            var folder = Server.MapPath("~\\App_Data\\");
+            var oldPath = folder + "EntryTemplate.xlsx";
+            var newPath = folder + form.FirstName + "_" + form.LastName + "_" + DateTime.Now.ToShortDateString() + ".xlsx";
+            //System.IO.File.Copy(oldPath, newPath);
 
-        //    var fileInfo = new FileInfo(newPath);
-        //    var excelFile = new ExcelQueryFactory(newPath);
-        //    using (var stream = System.IO.File.Open(newPath, FileMode.Open, FileAccess.ReadWrite))
-        //    {
-        //        using (var reader = ExcelReaderFactory.CreateReader(stream))
-        //        {
-        //            var result = reader.AsDataSet(new ExcelDataSetConfiguration() { ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration() { UseHeaderRow = true } });
 
-        //            var table = result.Tables[0];
-        //            var newRow = table.Rows[1];
 
-        //            newRow["Aktnr"] = form.Aktnr;
-        //            newRow["Org.nr"] = form.Orgnr;
-        //            newRow["Stiftelsenr"] = form.Stiftelsenr;
-        //            newRow["Län"] = form.Län;
-        //            newRow["Stiftelsenamn"] = form.Stiftelsenamn;
-        //            newRow["Kommun"] = form.Kommun;
-        //            newRow["Adress"] = form.Adress;
-        //            newRow["C/o adress"] = form.CoAdress;
-        //            newRow["Postnr"] = form.Postnr;
-        //            newRow["Postadress"] = form.Postadress;
-        //            newRow["Telefon"] = form.Telefon;
-        //            newRow["Stiftelsetyp"] = form.Stiftelsetyp;
-        //            newRow["År"] = form.År;
-        //            newRow["Förmögenhet"] = form.Förmögenhet;
-        //            newRow["Ändamål"] = form.Ändamål;
+            //var result = reader.AsDataSet(new ExcelDataSetConfiguration() { ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration() { UseHeaderRow = true } });
+            var workbook = new XLWorkbook(oldPath);
+            var ws = workbook.Worksheet(1);
+            var rngData = ws.Range("A1:P2");
+            var xCeltable = rngData.AsTable();
+            var u = ws.Columns().Count();
 
-        //            table.Rows[1].BeginEdit();
-        //            table.Rows[1]
+            xCeltable.Field("Stiftelsenamn").Column.Cell(2).Value = form.Stiftelsenamn;
+            xCeltable.Field("Org.nr").Column.Cell(2).Value = form.Orgnr;
+            xCeltable.Field("Kommun").Column.Cell(2).Value = form.Kommun;
+            xCeltable.Field("Adress").Column.Cell(2).Value = form.Adress;
+            xCeltable.Field("C/o adress").Column.Cell(2).Value = form.CoAdress;
+            xCeltable.Field("Postnr").Column.Cell(2).Value = form.Postnr;
+            xCeltable.Field("Postadress").Column.Cell(2).Value = form.Postadress;
+            xCeltable.Field("Telefon").Column.Cell(2).Value = form.Telefon;
+            xCeltable.Field("Stiftelsetyp").Column.Cell(2).Value = form.Stiftelsetyp;
+            xCeltable.Field("År").Column.Cell(2).Value = form.År;
+            xCeltable.Field("Förmögenhet").Column.Cell(2).Value = form.Förmögenhet;
+            xCeltable.Field("Ändamål").Column.Cell(2).Value = form.Ändamål;
+            xCeltable.Field("Län").Column.Cell(2).Value = form.Län;
 
-        //            table.AcceptChanges();
-        //            result.Tables[0].AcceptChanges();
-        //            result.AcceptChanges();
+            var t = ws.Columns().Count();
+            ws.Column(100).Delete(); //File is saved with 1025 columns where there were 1024 for some reason, which throws a warning in some readers. This is to avoid that.
+            workbook.SaveAs(newPath);
 
-        //        }
-        //        stream.Dispose();
-        //        stream.Close();
-        //    }
-
-        //    return newPath;
-        //}
+            return newPath;
+        }
         #endregion
     }
 }
+
+
+//using (var reader = ExcelReaderFactory.CreateReader(stream))
+//{
+//    var result = reader.AsDataSet(new ExcelDataSetConfiguration() { ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration() { UseHeaderRow = true } });
+
+//    var table = result.Tables[0];
+//    var newRow = table.Rows[1];
+
+//    newRow["Org.nr"] = form.Orgnr;
+
+//    newRow["Län"] = form.Län;
+//    newRow["Stiftelsenamn"] = form.Stiftelsenamn;
+//    newRow["Kommun"] = form.Kommun;
+//    newRow["Adress"] = form.Adress;
+//    newRow["C/o adress"] = form.CoAdress;
+//    newRow["Postnr"] = form.Postnr;
+//    newRow["Postadress"] = form.Postadress;
+//    newRow["Telefon"] = form.Telefon;
+//    newRow["Stiftelsetyp"] = form.Stiftelsetyp;
+//    newRow["År"] = form.År;
+//    newRow["Förmögenhet"] = form.Förmögenhet;
+//    newRow["Ändamål"] = form.Ändamål;
+
+//    table.Rows[1].BeginEdit();
+//    table.Rows[1]
+
+//    table.AcceptChanges();
+//    result.Tables[0].AcceptChanges();
+//    result.AcceptChanges();
+
+//}
