@@ -710,9 +710,9 @@ namespace Stipendium.Controllers
 
         private string GenerateApplication(StiftelseApplicationForm form)
         {
-            var folder = Server.MapPath("~/App_Data/");
+            var folder = Server.MapPath("~/App_Data/");throw new Exception(folder);
            
-            var oldPath = folder + "EntryTemplate.xlsx"; throw new Exception(oldPath);
+            var oldPath = folder + "EntryTemplate.xlsx"; 
             var newPath = folder + form.FirstName + "_" + form.LastName + "_" + DateTime.Now.ToShortDateString() + ".xlsx";
             System.IO.File.Copy(oldPath, newPath);
 
