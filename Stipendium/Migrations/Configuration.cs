@@ -47,7 +47,7 @@ namespace Stipendium.Migrations
             }
 
 
-            var admin = new ApplicationUser() { Email = "admin@stipendium.se", UserName = "admin@stipendium.se" };
+            var admin = new ApplicationUser() { Email = "stiftelseverket@gmail.com", UserName = "stiftelseverket@gmail.com",FirstName="Stiftelseverket",LastName="Administration" };
             var user = db.Users;
 
             if (AppUserManager.FindByEmail("admin@stipendium.se") == null)
