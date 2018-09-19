@@ -710,15 +710,15 @@ namespace Stipendium.Controllers
 
         private string GenerateApplication(StiftelseApplicationForm form)
         {
-            var folder = Server.MapPath("~/App_Data/");
+            var folder = Server.MapPath("~\\App_Data\\");
             var oldPath = folder + "EntryTemplate.xlsx";
             var newPath = folder + form.FirstName + "_" + form.LastName + "_" + DateTime.Now.ToShortDateString() + ".xlsx";
-            //System.IO.File.Copy(oldPath, newPath);
+            System.IO.File.Copy(oldPath, newPath);
 
 
 
             //var result = reader.AsDataSet(new ExcelDataSetConfiguration() { ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration() { UseHeaderRow = true } });
-            var workbook = new XLWorkbook(oldPath);
+            var workbook = new XLWorkbook(newPath);
             var ws = workbook.Worksheet(1);
             var rngData = ws.Range("A1:P2");
             var xCeltable = rngData.AsTable();
@@ -740,7 +740,7 @@ namespace Stipendium.Controllers
 
             var t = ws.Columns().Count();
             ws.Column(100).Delete(); //File is saved with 1025 columns where there were 1024 for some reason, which throws a warning in some readers. This is to avoid that.
-            workbook.SaveAs(newPath);
+            workbook.Save();
 
             return newPath;
         }
