@@ -54,9 +54,12 @@ namespace Stipendium.Migrations
             {
                 UserManager.Create(admin, "admin1");
                 //context.Users.AddOrUpdate(admin);
-                UserManager.AddToRole(admin.Id, "Admin");
+                
             }
-
+            if(UserManager.FindByEmail("stiftelseverket@gmail.com").Roles.Count == 0)
+            {
+                UserManager.AddToRole(UserManager.FindByEmail("stiftelseverket@gmail.com").Id, "Admin");
+            }
 
 
         }

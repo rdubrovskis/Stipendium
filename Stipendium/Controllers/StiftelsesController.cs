@@ -234,7 +234,7 @@ namespace Stipendium.Controllers
                                             Stiftelsetyp = row["Stiftelsetyp"].ToString(),
                                             Status = row["Status"].ToString(),
                                             År = row["År"].ToString(),
-                                            Förmögenhet = row["Förmögenhet"].ToString(),
+                                            Förmögenhet = row["Förmögenhet"].ToString() != "" ? row["Förmögenhet"].ToString() : "0" ,
                                             Ändamål = row["Ändamål"].ToString(),
                                             DateCreated = DateTime.Now,
                                             LastModified = DateTime.Now
