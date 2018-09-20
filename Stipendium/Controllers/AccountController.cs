@@ -282,7 +282,7 @@ namespace Stipendium.Controllers
                 return View("Error");
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "E-post bekräftad" : "Error");
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
         //
